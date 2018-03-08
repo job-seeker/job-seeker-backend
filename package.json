@@ -1,0 +1,24 @@
+{
+  "name": "job-seeker-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/job-seeker/job-seeker-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/job-seeker/job-seeker-backend/issues"
+  },
+  "homepage": "https://github.com/job-seeker/job-seeker-backend#readme"
+}
