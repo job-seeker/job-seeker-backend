@@ -10,7 +10,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "test": "DEBUG='job-seeker*' jest -i --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+   "test": "jest -i",
     "start": "DEBUG='job-seeker*' node server.js"
   },
   "repository": {
