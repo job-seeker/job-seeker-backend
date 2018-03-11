@@ -10,7 +10,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-   "test": "jest -i",
+    "test": "jest -i",
     "start": "DEBUG='job-seeker*' node server.js"
   },
   "repository": {
