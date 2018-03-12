@@ -7,30 +7,15 @@ const PORT = process.env.PORT || 3000;
 
 const User = require('../model/user');
 const Profile = require('../model/profile');
+require('./lib/mock-data.js');
+
+const {exampleUser, exampleProfile, updatedProfile} = require('./lib/mock-data.js');
 
 const url = `http://localhost:${PORT}`;
 require('jest');
 
-const exampleUser = {
-  username: 'testuser',
-  email: 'testemail@test.com',
-  password: '1234',
-};
-
-const exampleProfile = {
-  name: 'testprofile',
-  email: 'testemail@test.com',
-};
-
-const updatedProfile = {
-  name: 'newtestprofile',
-  email: 'newtestemail@test.com',
-};
-
 describe('Profile routes', function() {
-
   beforeAll( done => serverToggle.serverOn(server, done));
-
   afterAll( done => serverToggle.serverOff(server, done));
 
   afterEach( done => {
