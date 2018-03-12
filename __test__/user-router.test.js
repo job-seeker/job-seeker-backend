@@ -9,19 +9,13 @@ const PORT = process.env.PORT || 3000;
 require('jest');
 
 const url = `http://localhost:${PORT}`;
-const exampleUser = { username: 'Test user', password: 'user@test.com' };
-
-describe('Dummy Test', function() {
-  it('should return true', function() {
-    expect(true).toEqual(true);
-  });
-});
+const exampleUser = { username: 'Test user', email: 'user@test.com', password: '1234' };
 
 describe('User Auth Routes', function() {
   beforeAll( done => serverToggle.serverOn(server, done));
   afterAll( done => serverToggle.serverOff(server, done));
 
-  describe('POST: /api/', function() {
+  describe('POST: /api/signup', function() {
     describe('with a valid body', function() {
       afterEach ( done => {
         User.remove({})
@@ -52,7 +46,7 @@ describe('User Auth Routes', function() {
     });
   });
 
-  describe('GET: /api/', function() {
+  describe('GET: /api/signin', function() {
     describe('with a valid body', function() {
       beforeEach( done => {
         let user = new User(exampleUser);
@@ -92,7 +86,6 @@ describe('User Auth Routes', function() {
     });
     describe('with an invalid username and password', function() {
       it('should return a 500 error', done => {
-        // is 500 accurate...?
         request.get(`${url}/api/signin`)
           .auth('fakeusername', 'fakepassword')
           .end((err, res) => {
