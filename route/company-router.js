@@ -13,12 +13,12 @@ const companyRouter = module.exports = Router();
 
 companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company');
-  if(!req.body.name) return next(createError(400, 'bad request'));
+  if(!req.body.companyName) return next(createError(400, 'bad request'));
 
   Profile.findById(req.params.profileId)
     .then( () => {
       let companyData = {
-        companyName: req.body.name,
+        companyName: req.body.companyName,
         website: req.body.website,
         userId: req.user._id,
         profileId: req.params.profileId,
@@ -31,6 +31,7 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
       };
       return new Company(companyData).save();
     })
+    // .populate('company')
     .then( company => res.json(company))
     .catch(next);
 });
@@ -38,15 +39,20 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
 companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
   debug('PUT: /api/profile/:profileId/company/:companyId');
   Profile.findById(req.params.profileId)
-    .then(Company.findByIdAndUpdate(req.param.companyId, req.body, {new:true}))
+    .populate('companies')
+    .then( company => { if(req.params.companyId === company) return company;})
+    // .then(Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true}))
     .then(company => res.json(company))
     .catch(err => next(err));
 });
 
 companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
   debug('GET: /api/profile/:profileId/company/:companyId');
+
   Profile.findById(req.params.profileId)
-    .then(Company.findById(req.params.companyId))
+    .populate('companies')
+    .then(company => { if (req.params.companyId === company) return company; })
+    // .then(Company.findById(req.params.companyId))
     .then(company => res.json(company))
     .catch(err => next(err));
 });
