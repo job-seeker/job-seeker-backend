@@ -74,6 +74,7 @@ describe('Profile routes', function() {
         .send(exampleProfile)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          // additional tests here
           done();
         });
     });
@@ -86,6 +87,20 @@ describe('Profile routes', function() {
         })
         .end((err, res) => {
           expect(res.status).toEqual(400);
+          // additional tests here
+          done();
+        });
+    });
+
+    it('should return a 404 with an invalid request', done => {
+      request.post(`${url}/api/profilez`)
+        .send(exampleProfile)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          // additional tests here
           done();
         });
     });
