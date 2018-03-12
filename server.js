@@ -16,3 +16,5 @@ app.use(morgan('dev'));
 app.listen(PORT, () => {
   debug(`server up: ${PORT}`);
 });
+
+server.isRunning = true;
