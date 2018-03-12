@@ -12,8 +12,9 @@ const profileRouter = module.exports = Router();
 profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile');
   if(!req.body.name) return next(createError(400, 'bad request'));
+  if(!req.body.email) return next(createError(400, 'bad request'));
 
-  req.body.userID = req.user._id;
+  req.body.userId = req.user._id;
   new Profile(req.body).save()
     .then( profile => res.json(profile))
     .catch(next);
@@ -37,6 +38,8 @@ profileRouter.delete('/api/profile/:profileId', bearerAuth, function(req, res, n
 
 profileRouter.put('/api/profile/:profileId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId');
+
+  if(Object.keys(req.body).length === 0) return next(createError(400, 'bad request'));
 
   Profile.findByIdAndUpdate(req.params.profileId, req.body, { new: true })
     .then( profile => res.json(profile))

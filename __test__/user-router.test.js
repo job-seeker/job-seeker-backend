@@ -6,10 +6,9 @@ const server = require('../server.js');
 const PORT = process.env.PORT || 3000;
 
 const User = require('../model/user.js');
-const exampleUser = require('./lib/mock-user.js');
+const {exampleUser} = require('./lib/mock-data.js');
 
 const url = `http://localhost:${PORT}`;
-
 require('jest');
 
 describe('User Auth Routes', function() {
