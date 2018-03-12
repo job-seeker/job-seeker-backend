@@ -1,15 +1,16 @@
 'use strict';
 
 const request = require('superagent');
-const User = require('../model/user.js');
 const serverToggle = require('../lib/server-toggle.js');
 const server = require('../server.js');
 const PORT = process.env.PORT || 3000;
 
-require('jest');
+const User = require('../model/user.js');
+const exampleUser = require('./lib/mock-user.js');
 
 const url = `http://localhost:${PORT}`;
-const exampleUser = { username: 'Test user', email: 'user@test.com', password: '1234' };
+
+require('jest');
 
 describe('User Auth Routes', function() {
   beforeAll( done => serverToggle.serverOn(server, done));
