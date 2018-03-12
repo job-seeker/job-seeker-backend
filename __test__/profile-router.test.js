@@ -22,6 +22,11 @@ const exampleProfile = {
   email: 'testemail@test.com',
 };
 
+const updatedProfile = {
+  name: 'newtestprofile',
+  email: 'newtestemail@test.com',
+};
+
 describe('Profile routes', function() {
 
   beforeAll( done => serverToggle.serverOn(server, done));
@@ -204,6 +209,52 @@ describe('Profile routes', function() {
 
     afterEach( () => {
       delete exampleProfile.userId;
+    });
+
+    it('should return a 200', done => {
+      request.put(`${url}/api/profile/${this.tempProfile._id}`)
+        .send(updatedProfile)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body.name).toEqual(updatedProfile.name);
+          expect(res.body.email).toEqual(updatedProfile.email);
+          done();
+        });
+    });
+
+    it('should return a 401 if no token was provided', done => {
+      request.put(`${url}/api/profile/${this.tempProfile._id}`)
+        .send(updatedProfile)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
+    });
+
+    it('should return a 404 if no id provided', done => {
+      request.put(`${url}/api/profile`)
+        .send(updatedProfile)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          done();
+        });
+    });
+
+    it('should return a 400 if no request body provided', done => {
+      request.put(`${url}/api/profile/${this.tempProfile._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          done();
+        });
     });
   });
 });

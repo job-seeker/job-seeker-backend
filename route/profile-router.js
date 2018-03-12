@@ -39,6 +39,8 @@ profileRouter.delete('/api/profile/:profileId', bearerAuth, function(req, res, n
 profileRouter.put('/api/profile/:profileId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId');
 
+  if(Object.keys(req.body).length === 0) return next(createError(400, 'bad request'));
+
   Profile.findByIdAndUpdate(req.params.profileId, req.body, { new: true })
     .then( profile => res.json(profile))
     .catch(err => next(err));
