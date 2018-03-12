@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 
+const profileRouter = require('./route/profile-router');
 const userRouter = require('./route/user-router.js');
 const errors = require('./lib/error-middleware.js');
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(userRouter);
+app.use(profileRouter);
 app.use(errors);
 
 const server = module.exports = app.listen(PORT, () => {
