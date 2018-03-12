@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 
+const profileRouter = require('./route/profile-router');
 const userRouter = require('./route/user-router.js');
 const profileRouter = require('./route/profile-router.js');
 const errors = require('./lib/error-middleware.js');
