@@ -174,4 +174,36 @@ describe('Profile routes', function() {
         });
     });
   });
+
+  describe('PUT: /api/profile/:profileId', () => {
+    
+    beforeEach( done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then( token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+
+    beforeEach( done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+
+    afterEach( () => {
+      delete exampleProfile.userId;
+    });
+  });
 });
