@@ -3,6 +3,7 @@
 const debug = require('debug')('job-seeker:company');
 const createError = require('http-errors');
 const Job = require('./job.js');
+const Contact = require('./contact');
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -45,6 +46,50 @@ Company.findByIdAndAddJob = function(id, job) {
     })
     .then( () => {
       return this.tempJob;
+    })
+    .catch( err => Promise.reject(createError(404, err.message)));
+};
+
+Company.findByIdAndAddContact = function(id, contact) {
+  debug('findByIdAndAddContact');
+  
+  return Company.findById(id)
+    .then( company => {
+      contact.userId = company.userId;
+      contact.profileId = company.profileId;
+      contact.companyId = company._id;
+      this.tempCompany = company;
+      return new Contact(contact).save();
+    })
+    .then( contact => {
+      this.tempCompany.contacts.push(contact._id);
+      this.tempContact = contact;
+      return this.tempCompany.save();
+    })
+    .then( () => {
+      return this.tempContact;
+    })
+    .catch( err => Promise.reject(createError(404, err.message)));
+};
+
+Company.findByIdAndAddEvent = function(id, event) {
+  debug('findByIdAndAddEvent');
+  
+  return Company.findById(id)
+    .then( company => {
+      event.userId = company.userId;
+      event.profileId = company.profileId;
+      event.companyId = company._id;
+      this.tempCompany = company;
+      return new Event(event).save();
+    })
+    .then( event => {
+      this.tempCompany.events.push(event._id);
+      this.tempEvent = event;
+      return this.tempCompany.save();
+    })
+    .then( () => {
+      return this.tempEvent;
     })
     .catch( err => Promise.reject(createError(404, err.message)));
 };
