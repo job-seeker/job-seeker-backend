@@ -15,7 +15,9 @@ const contactRouter = module.exports = Router();
 contactRouter.post('/api/profile/:profileId/company/:companyId/contact', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/contact');
 
-
+  Company.findByIdAndAddContact(req.params.companyId, req.body)
+    .then( contact => res.json(contact))
+    .catch(next);
 });
 
 contactRouter.get('/api/profile/:profileId/company/:companyId/contact/:contactId', bearerAuth, function(req, res, next) {
