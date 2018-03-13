@@ -57,6 +57,7 @@ describe('Company Routes', function() {
       });
       afterAll( done => {
         delete exampleProfile.userId;
+        console.log('temprofile:', this.tempProfile);
         done();
       });
       it('should return a company', done => {
@@ -65,7 +66,7 @@ describe('Company Routes', function() {
           .set({ Authorization: `Bearer ${this.tempToken}`})
           .send(exampleCompany)
           .end((err, res) => {
-            
+          
             
             expect(res.status).toEqual(200);
             done();
@@ -193,7 +194,7 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           console.log('get res', res.body)
-          console.log('tempProfile', this.tempProfile)
+          //console.log('tempProfile', this.tempProfile)
           expect(res.status).toEqual(200);
           done();
         });
@@ -214,60 +215,62 @@ describe('Company Routes', function() {
     //     });
     // });
   });
-//   describe('PUT: /api/profile/:profileId/company/:companyId', function () {
-//     beforeAll(done => {
-//       new User(exampleUser)
-//         .generatePasswordHash(exampleUser.password)
-//         .then(user => user.save())
-//         .then(user => {
-//           this.tempUser = user;
-//           return user.generateToken();
-//         })
-//         .then(token => {
-//           this.tempToken = token;
-//           done();
-//         })
-//         .catch(done);
-//     });
-//     beforeAll(done => {
-//       exampleProfile.userId = this.tempUser._id.toString();
-//       new Profile(exampleProfile).save()
-//         .then(profile => {
-//           this.tempProfile = profile;
-//           done();
-//         })
-//         .catch(done);
-//     });
-//     beforeAll(done => {
-//       exampleCompany.userId = this.tempUser._id.toString();
-//       exampleCompany.profileId = this.tempProfile._id.toString();
-//       new Company(exampleCompany).save()
-//         .then(company => {
-//           this.tempCompany = company;
-//           done();
-//           console.log('tempcomp', company)
-//         })
-//         .catch(done);
-//     });
-//     afterAll(done => {
-//       delete exampleProfile.userId;
-//       done();
-//     });
-//     it('should return an updated company when provided valid token and body', done => {
-//       let updatedCompany = { companyName: 'FaceLook'};
-//       request.put(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}`)
-//         .send(updatedCompany)
-//         .set({ Authorization: `Bearer ${this.tempToken}` })
-//         .end((err, res) => {
-//           console.log(res.body)
-//           expect(res.status).toEqual(200);
-//           expect(res.body.companyName).toEqual(updatedCompany.companyName);
-//           expect(res.body.website).toEqual(exampleCompany.website);
-//           done();
-//         });
+  describe('PUT: /api/profile/:profileId/company/:companyId', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          done();
+          console.log('tempcomp', company);
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return an updated company when provided valid token and body', done => {
+      let updatedCompany = { companyName: 'FaceLook'};
+      request.put(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}`)
+        .send(updatedCompany)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          console.log(res.body);
+          //console.log('temprofile', this.tempProfile);
+          expect(res.status).toEqual(200);
+          expect(res.body.companyName).toEqual(updatedCompany.companyName);
+          expect(res.body.website).toEqual(exampleCompany.website);
+          done();
+        });
     
-    // });
+    });
   
-  // });
+  });
   
 });

@@ -33,6 +33,7 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
       let newCompany = new Company(companyData);
       profile.companies.push(newCompany._id);
       
+      console.log('newcompanyid', newCompany._id);
       return newCompany.save();
     })
     
@@ -40,24 +41,24 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
     .catch(next);
 });
 
-// companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
-//   debug('PUT: /api/profile/:profileId/company/:companyId');
-//   Profile.findById(req.params.profileId)
-//     .populate('companies')
-//     .then( company => { if(req.params.companyId === company) return company;})
-//     .then()
-//     // .then(Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true}))
-//     .then(company => res.json(company))
-//     .catch(err => next(err));
-// });
+companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
+  debug('PUT: /api/profile/:profileId/company/:companyId');
+  Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true})
+    .then( company => { 
+      if(req.params.profileId === company.profileId.toString()){
+        return res.json(company);
+      }
+    })
+    .catch(err => next(err));
+});
 
 companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId/company/:companyId');
   
   Company.findById(req.params.companyId)
     .then(company => { 
-      console.log(typeof req.params.profileId)
-      console.log(typeof company.profileId)
+      console.log(typeof req.params.profileId);
+      console.log(typeof company.profileId);
       if (req.params.profileId === company.profileId.toString()) { 
         return res.json(company);
       }
@@ -65,21 +66,15 @@ companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, func
     .catch(next);
   
 });
-// companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
-//   debug('GET: /api/profile/:profileId/company/:companyId');
 
-//   Profile.findById(req.params.profileId)
-//     .populate('companies')
-//     .then(company => { if (req.params.companyId === company) return company; })
-//     // .then(Company.findById(req.params.companyId))
-//     .then(company => res.json(company))
-//     .catch(err => next(err));
-// });
-
-// companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
-//   debug('DELETE: /api/profile/:profileId/company/:companyId');
-//   Profile.findById(req.params.profileId)
-//     .then(Company.findByIdAndRemove(req.params.companyId, bearerAuth))
-//     .then( () => res.send(204))
-//     .catch(err => next(err));
-// });
+companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
+  debug('DELETE: /api/profile/:profileId/company/:companyId');
+  
+  Company.findByIdAndRemove(req.params.companyId, bearerAuth)
+    .then(company => { 
+      if (req.params.profileId === company.profileId.toString()) { 
+        return res.send(204);
+      }
+    })
+    .catch(next);
+});
