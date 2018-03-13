@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const profileSchema = Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
-  companies: { type: Array, default: [] },
+  companies: [{ type: Schema.Types.ObjectId, ref: 'company' }],
   userId: { type: Schema.Types.ObjectId, required: true },
 });
 
