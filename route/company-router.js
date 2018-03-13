@@ -16,7 +16,7 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
   if(!req.body.companyName) return next(createError(400, 'bad request'));
 
   Profile.findById(req.params.profileId)
-    .then( () => {
+    .then( profile => {
       let companyData = {
         companyName: req.body.companyName,
         website: req.body.website,
@@ -29,38 +29,43 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
         phone: req.body.phone || null,
         companyNotes: req.body.companyNotes || null,
       };
-      return new Company(companyData).save();
+      
+      let newCompany = new Company(companyData);
+      profile.companies.push(newCompany._id);
+      
+      return newCompany.save();
     })
-    // .populate('company')
+    
     .then( company => res.json(company))
     .catch(next);
 });
 
-companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
-  debug('PUT: /api/profile/:profileId/company/:companyId');
-  Profile.findById(req.params.profileId)
-    .populate('companies')
-    .then( company => { if(req.params.companyId === company) return company;})
-    // .then(Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true}))
-    .then(company => res.json(company))
-    .catch(err => next(err));
-});
+// companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
+//   debug('PUT: /api/profile/:profileId/company/:companyId');
+//   Profile.findById(req.params.profileId)
+//     .populate('companies')
+//     .then( company => { if(req.params.companyId === company) return company;})
+//     .then()
+//     // .then(Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true}))
+//     .then(company => res.json(company))
+//     .catch(err => next(err));
+// });
 
-companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
-  debug('GET: /api/profile/:profileId/company/:companyId');
+// companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
+//   debug('GET: /api/profile/:profileId/company/:companyId');
 
-  Profile.findById(req.params.profileId)
-    .populate('companies')
-    .then(company => { if (req.params.companyId === company) return company; })
-    // .then(Company.findById(req.params.companyId))
-    .then(company => res.json(company))
-    .catch(err => next(err));
-});
+//   Profile.findById(req.params.profileId)
+//     .populate('companies')
+//     .then(company => { if (req.params.companyId === company) return company; })
+//     // .then(Company.findById(req.params.companyId))
+//     .then(company => res.json(company))
+//     .catch(err => next(err));
+// });
 
-companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
-  debug('DELETE: /api/profile/:profileId/company/:companyId');
-  Profile.findById(req.params.profileId)
-    .then(Company.findByIdAndRemove(req.params.companyId, bearerAuth))
-    .then( () => res.send(204))
-    .catch(err => next(err));
-});
+// companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
+//   debug('DELETE: /api/profile/:profileId/company/:companyId');
+//   Profile.findById(req.params.profileId)
+//     .then(Company.findByIdAndRemove(req.params.companyId, bearerAuth))
+//     .then( () => res.send(204))
+//     .catch(err => next(err));
+// });
