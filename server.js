@@ -9,6 +9,8 @@ const cors = require('cors');
 
 const userRouter = require('./route/user-router.js');
 const profileRouter = require('./route/profile-router.js');
+const companyRouter = require('./route/company-router.js');
+const jobRouter = require('./route/job-router.js');
 const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
@@ -21,6 +23,8 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(userRouter);
 app.use(profileRouter);
+app.use(companyRouter);
+app.use(jobRouter);
 app.use(errors);
 
 const server = module.exports = app.listen(PORT, () => {
