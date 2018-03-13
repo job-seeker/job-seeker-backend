@@ -59,8 +59,14 @@ describe('Job Routes', function() {
           .set({ Authorization: `Bearer ${this.tempToken}` })
           .send(exampleJob)
           .end((err, res) => {
-            // console.log(err)
+            if (err) return done(err);
             expect(res.status).toEqual(200);
+            expect(res.body.title).toEqual(exampleJob.title);
+            expect(res.body.link).toEqual(exampleJob.link);
+            expect(res.body.status).toEqual(exampleJob.status);
+            expect(this.tempUser._id.toString()).toEqual(res.body.userId);
+            expect(this.tempProfile._id.toString()).toEqual(res.body.profileId);
+            expect(this.tempCompany._id.toString()).toEqual(res.body.companyId);
             done();
           });
       });
