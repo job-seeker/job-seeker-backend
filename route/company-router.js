@@ -53,10 +53,17 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
 
 companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId/company/:companyId');
-
+  
   Company.findById(req.params.companyId)
-    .then( company => res.json(company))
+    .then(company => { 
+      console.log(typeof req.params.profileId)
+      console.log(typeof company.profileId)
+      if (req.params.profileId === company.profileId.toString()) { 
+        return res.json(company);
+      }
+    })
     .catch(next);
+  
 });
 // companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
 //   debug('GET: /api/profile/:profileId/company/:companyId');

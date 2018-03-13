@@ -8,22 +8,11 @@ const PORT = process.env.PORT || 3000;
 const User = require('../model/user.js');
 const Profile = require('../model/profile.js');
 const Company = require('../model/company.js');
-const exampleUser = require('./lib/mock-data.js');
+const { exampleUser, exampleProfile, exampleCompany } = require('./lib/mock-data.js');
 
 const url = `http://localhost:${PORT}`;
 
 require('jest');
-
-
-const exampleProfile = {
-  name: 'example name',
-  email: exampleUser.email,
-};
-
-const exampleCompany = {
-  companyName: 'FakeBook',
-  website: 'www.fakebook.com',
-};
 
 describe('Company Routes', function() {
   beforeAll( done => {
@@ -190,6 +179,7 @@ describe('Company Routes', function() {
       new Company(exampleCompany).save()
         .then( company => {
           this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
           done();
         })
         .catch(done);
@@ -203,6 +193,7 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           console.log('get res', res.body)
+          console.log('tempProfile', this.tempProfile)
           expect(res.status).toEqual(200);
           done();
         });
