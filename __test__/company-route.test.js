@@ -219,6 +219,10 @@ describe('Company Routes', function() {
         .then( company => {
           this.tempCompany = company;
           this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
           done();
         })
         .catch(done);
@@ -287,6 +291,10 @@ describe('Company Routes', function() {
         .then(company => {
           this.tempCompany = company;
           this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
           done();
         })
         .catch(done);
