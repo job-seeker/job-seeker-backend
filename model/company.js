@@ -1,5 +1,9 @@
 'use strict';
 
+const debug = require('debug')('job-seeker:company');
+const createError = require('http-errors');
+const Job = require('./job.js');
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -20,4 +24,27 @@ const companySchema = Schema({
   created: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('company', companySchema);
+const Company = module.exports = mongoose.model('company', companySchema);
+
+Company.findByIdAndAddJob = function(id, job) {
+  debug('findByIdAndAddJob');
+  
+  return Company.findById(id)
+    .then( company => {
+      console.log(company)
+      job.userId = company.userId;
+      job.profileId = company.profileId;
+      job.companyId = company._id;
+      this.tempCompany = company;
+      return new Job(job).save();
+    })
+    .then( job => {
+      this.tempCompany.jobPosting.push(job._id);
+      this.tempJob = job;
+      return this.tempCompany.save();
+    })
+    .then( () => {
+      return this.tempJob;
+    })
+    .catch( err => Promise.reject(createError(404, err.message)));
+};
