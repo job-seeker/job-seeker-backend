@@ -8,22 +8,11 @@ const PORT = process.env.PORT || 3000;
 const User = require('../model/user.js');
 const Profile = require('../model/profile.js');
 const Company = require('../model/company.js');
-const exampleUser = require('./lib/mock-user.js');
+const { exampleUser, exampleProfile, exampleCompany } = require('./lib/mock-data.js');
 
 const url = `http://localhost:${PORT}`;
 
 require('jest');
-
-
-const exampleProfile = {
-  name: 'example name',
-  email: exampleUser.email,
-};
-
-const exampleCompany = {
-  companyName: 'FakeBook',
-  website: 'www.fakebook.com',
-};
 
 describe('Company Routes', function() {
   beforeAll( done => {
@@ -70,7 +59,7 @@ describe('Company Routes', function() {
         delete exampleProfile.userId;
         done();
       });
-      it.only('should return a company', done => {
+      it('should return a company', done => {
         
         request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
           .set({ Authorization: `Bearer ${this.tempToken}`})
@@ -84,7 +73,7 @@ describe('Company Routes', function() {
       });
 
 
-//     });
+    });
 //     describe('without valid token', function() {
 //       beforeAll(done => {
 //         new User(exampleUser)
@@ -159,70 +148,72 @@ describe('Company Routes', function() {
 //           });
 //       });
 //     });
-//   });
-//   describe('GET: /api/profile/:profileId/company/:companyId', function() {
-//     beforeAll(done => {
-//       new User(exampleUser)
-//         .generatePasswordHash(exampleUser.password)
-//         .then(user => user.save())
-//         .then(user => {
-//           this.tempUser = user;
-//           return user.generateToken();
-//         })
-//         .then(token => {
-//           this.tempToken = token;
-//           done();
-//         })
-//         .catch(done);
-//     });
-//     beforeAll(done => {
-//       exampleProfile.userId = this.tempUser._id.toString();
-//       new Profile(exampleProfile).save()
-//         .then(profile => {
-//           this.tempProfile = profile;
-//           done();
-//         })
-//         .catch(done);
-//     });
-//     beforeAll( done => {
-//       exampleCompany.userId = this.tempUser._id.toString();
-//       exampleCompany.profileId = this.tempProfile._id.toString();
-//       new Company(exampleCompany).save()
-//         .then( company => {
-//           this.tempCompany = company;
-//           done();
-//         })
-//         .catch(done);
-//     });
-//     afterAll(done => {
-//       delete exampleProfile.userId;
-//       done();
-//     });
-//     it('should return a company when provided valid token and body', done => {
-//       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
-//         .set({ Authorization: `Bearer ${this.tempToken}` })
-//         .end((err, res) => {
-//           console.log('get res', res.body)
-//           expect(res.status).toEqual(200);
-//           done();
-//         });
-//     });
-//     it('should return a 404 error when submitted without id', done => {
-//       request.get(`${url}/api/profile/${this.tempProfile._id}/company`)
-//         .set({ Authorization: `Bearer ${this.tempToken}` })
-//         .end((err, res) => {
-//           expect(res.status).toEqual(404);
-//           done();
-//         });
-//     });
-//     it('should give 401 error when sent without token', done => {
-//       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
-//         .end((err, res) => {
-//           expect(res.status).toEqual(401);
-//           done();
-//         });
-//     });
-//   });
+  });
+  describe('GET: /api/profile/:profileId/company/:companyId', function() {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then( company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return a company when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          console.log('get res', res.body)
+          console.log('tempProfile', this.tempProfile)
+          expect(res.status).toEqual(200);
+          done();
+        });
+    });
+    // it('should return a 404 error when submitted without id', done => {
+    //   request.get(`${url}/api/profile/${this.tempProfile._id}/company`)
+    //     .set({ Authorization: `Bearer ${this.tempToken}` })
+    //     .end((err, res) => {
+    //       expect(res.status).toEqual(404);
+    //       done();
+    //     });
+    // });
+    // it('should give 401 error when sent without token', done => {
+    //   request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
+    //     .end((err, res) => {
+    //       expect(res.status).toEqual(401);
+    //       done();
+    //     });
+    // });
+  });
 //   describe('PUT: /api/profile/:profileId/company/:companyId', function () {
 //     beforeAll(done => {
 //       new User(exampleUser)
@@ -275,8 +266,8 @@ describe('Company Routes', function() {
 //           done();
 //         });
     
-    });
+    // });
   
-  });
+  // });
   
 });
