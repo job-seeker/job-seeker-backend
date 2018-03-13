@@ -38,7 +38,6 @@ let exampleContact = {
   linkedIn: faker.internet.url(),
 };
 
-
 module.exports = {
   'exampleUser': exampleUser,
   'exampleProfile': exampleProfile,

@@ -10,7 +10,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "test": "jest -i",
+    "test": "DEBUG='job-seeker*' jest -i --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "start": "DEBUG='job-seeker*' node server.js"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "morgan": "^1.9.0"
   },
   "devDependencies": {
+    "faker": "^4.1.0",
     "jest": "^22.4.2",
     "superagent": "^3.8.2"
   }
