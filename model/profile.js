@@ -2,6 +2,9 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const createError = require('http-errors');
+const Company = require('./company.js');
+const debug = require('debug')('job-seeker:profile');
 
 const profileSchema = Schema({
   name: { type: String, required: true },
@@ -10,4 +13,24 @@ const profileSchema = Schema({
   userId: { type: Schema.Types.ObjectId, required: true },
 });
 
-module.exports = mongoose.model('profile', profileSchema);
+const Profile = module.exports = mongoose.model('profile', profileSchema);
+
+Profile.findByIdAndAddCompany = function(id, company) {
+  debug('findByIdAndAddCompany');
+  return Profile.findById(id)
+    .then(profile => {
+      company.profileId = profile._id;
+      company.userId = profile.userId;
+      this.tempProfile = profile;
+      return new Company(company).save();
+    })
+    .then(company => {
+      this.tempProfile.companies.push(company._id);
+      this.tempCompany = company;
+      return this.tempProfile.save();
+    })
+    .then(() => {
+      return this.tempCompany;
+    })
+    .catch(err => Promise.reject(createError(404, err.message)));
+};
