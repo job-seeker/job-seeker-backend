@@ -37,95 +37,117 @@
 #### _User_
 **POST**
 ```
+/api/signup
 ```
 
 **GET**
 ```
+/api/signin
 ```
 
 #### Profile
 **POST**
 ```
+/api/profile
 ```
 
 **GET**
 ```
+/api/profile/:profileId
 ```
 
 **PUT**
 ```
+/api/profile/:profileId
 ```
 
 **DELETE**
 ```
+/api/profile/:profileId
 ```
 
 #### Company
 **POST**
 ```
+/api/profile/:profileId/company
 ```
 
 **GET**
 ```
+/api/profile/:profileId/company/:companyId
 ```
 
 **PUT**
 ```
+/api/profile/:profileId/company/:companyId
 ```
 
 **DELETE**
 ```
+/api/profile/:profileId/company/:companyId
 ```
 
 #### Job
 **POST**
 ```
+/api/profile/:profileId/company/:companyId/job
 ```
 
 **GET**
 ```
+/api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
 **PUT**
 ```
+/api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
 **DELETE**
 ```
+/api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
 #### Event
 **POST**
 ```
+/api/profile/:profileId/company/:companyId/event
 ```
 
 **GET**
 ```
+/api/profile/:profileId/company/:companyId/event/:eventId
 ```
 
 **PUT**
 ```
+/api/profile/:profileId/company/:companyId/event/:eventId
 ```
 
 **DELETE**
 ```
+/api/profile/:profileId/company/:companyId/event/:eventId
 ```
 
 #### Contact
 **POST**
 ```
+/api/profile/:profileId/company/:companyId/contact
 ```
 
 **GET**
 ```
+/api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 
 **PUT**
 ```
+/api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 
 **DELETE**
 ```
+/api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 
 ### Wireframes
