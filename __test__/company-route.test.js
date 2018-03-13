@@ -61,94 +61,93 @@ describe('Company Routes', function() {
         done();
       });
       it('should return a company', done => {
-        
         request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
           .set({ Authorization: `Bearer ${this.tempToken}`})
           .send(exampleCompany)
           .end((err, res) => {
-          
+            
             
             expect(res.status).toEqual(200);
             done();
           });
       });
-
+        
 
     });
-//     describe('without valid token', function() {
-//       beforeAll(done => {
-//         new User(exampleUser)
-//           .generatePasswordHash(exampleUser.password)
-//           .then(user => user.save())
-//           .then(user => {
-//             this.tempUser = user;
-//             return user.generateToken();
-//           })
-//           .then(token => {
-//             this.tempToken = token;
-//             done();
-//           })
-//           .catch(done);
-//       });
-//       beforeAll(done => {
-//         exampleProfile.userId = this.tempUser._id.toString();
-//         new Profile(exampleProfile).save()
-//           .then(profile => {
-//             this.tempProfile = profile;
-//             done();
-//           })
-//           .catch(done);
-//       });
-//       afterAll(done => {
-//         delete exampleProfile.userId;
-//         done();
-//       });
-//       it('should return 401 status', done => {
-//         request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
-//           .send(exampleCompany)
-//           .end((err, res) => {
-//             expect(res.status).toEqual(401);
-//             done();
-//           });
-//       });
-//     });
-//     describe('without valid body', function() {
-//       beforeAll(done => {
-//         new User(exampleUser)
-//           .generatePasswordHash(exampleUser.password)
-//           .then(user => user.save())
-//           .then(user => {
-//             this.tempUser = user;
-//             return user.generateToken();
-//           })
-//           .then(token => {
-//             this.tempToken = token;
-//             done();
-//           })
-//           .catch(done);
-//       });
-//       beforeAll(done => {
-//         exampleProfile.userId = this.tempUser._id.toString();
-//         new Profile(exampleProfile).save()
-//           .then(profile => {
-//             this.tempProfile = profile;
-//             done();
-//           })
-//           .catch(done);
-//       });
-//       afterAll(done => {
-//         delete exampleProfile.userId;
-//         done();
-//       });
-//       it('should return a 400 error', done => {
-//         request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
-//           .set({ Authorization: `Bearer ${this.tempToken}` })
-//           .end((err, res) => {
-//             expect(res.status).toEqual(400);
-//             done();
-//           });
-//       });
-//     });
+    describe('without valid token', function() {
+      beforeAll(done => {
+        new User(exampleUser)
+          .generatePasswordHash(exampleUser.password)
+          .then(user => user.save())
+          .then(user => {
+            this.tempUser = user;
+            return user.generateToken();
+          })
+          .then(token => {
+            this.tempToken = token;
+            done();
+          })
+          .catch(done);
+      });
+      beforeAll(done => {
+        exampleProfile.userId = this.tempUser._id.toString();
+        new Profile(exampleProfile).save()
+          .then(profile => {
+            this.tempProfile = profile;
+            done();
+          })
+          .catch(done);
+      });
+      afterAll(done => {
+        delete exampleProfile.userId;
+        done();
+      });
+      it('should return 401 status', done => {
+        request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
+          .send(exampleCompany)
+          .end((err, res) => {
+            expect(res.status).toEqual(401);
+            done();
+          });
+      });
+    });
+    describe('without valid body', function() {
+      beforeAll(done => {
+        new User(exampleUser)
+          .generatePasswordHash(exampleUser.password)
+          .then(user => user.save())
+          .then(user => {
+            this.tempUser = user;
+            return user.generateToken();
+          })
+          .then(token => {
+            this.tempToken = token;
+            done();
+          })
+          .catch(done);
+      });
+      beforeAll(done => {
+        exampleProfile.userId = this.tempUser._id.toString();
+        new Profile(exampleProfile).save()
+          .then(profile => {
+            this.tempProfile = profile;
+            done();
+          })
+          .catch(done);
+      });
+      afterAll(done => {
+        delete exampleProfile.userId;
+        done();
+      });
+      it('should return a 400 error', done => {
+        request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
+          .set({ Authorization: `Bearer ${this.tempToken}` })
+          .end((err, res) => {
+            expect(res.status).toEqual(400);
+            done();
+          });
+      });
+    });
   });
   describe('GET: /api/profile/:profileId/company/:companyId', function() {
     beforeAll(done => {
@@ -199,21 +198,21 @@ describe('Company Routes', function() {
           done();
         });
     });
-    // it('should return a 404 error when submitted without id', done => {
-    //   request.get(`${url}/api/profile/${this.tempProfile._id}/company`)
-    //     .set({ Authorization: `Bearer ${this.tempToken}` })
-    //     .end((err, res) => {
-    //       expect(res.status).toEqual(404);
-    //       done();
-    //     });
-    // });
-    // it('should give 401 error when sent without token', done => {
-    //   request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
-    //     .end((err, res) => {
-    //       expect(res.status).toEqual(401);
-    //       done();
-    //     });
-    // });
+    it('should return a 404 error when submitted without id', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
+    });
   });
   describe('PUT: /api/profile/:profileId/company/:companyId', function () {
     beforeAll(done => {
