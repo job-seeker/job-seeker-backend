@@ -54,12 +54,13 @@ describe('Job Routes', function() {
           })
           .catch(done);
       });
-      it.only('should return a job', done => {
+      it('should return a job', done => {
         request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/job`)
           .set({ Authorization: `Bearer ${this.tempToken}` })
           .send(exampleJob)
           .end((err, res) => {
             if (err) return done(err);
+            console.log(res.body)
             expect(res.status).toEqual(200);
             expect(res.body.title).toEqual(exampleJob.title);
             expect(res.body.link).toEqual(exampleJob.link);

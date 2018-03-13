@@ -11,6 +11,7 @@ const userRouter = require('./route/user-router.js');
 const profileRouter = require('./route/profile-router.js');
 const companyRouter = require('./route/company-router.js');
 const contactRouter = require('./route/contact-router');
+const jobRouter = require('./route/job-router.js');
 const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
@@ -25,6 +26,7 @@ app.use(userRouter);
 app.use(profileRouter);
 app.use(companyRouter);
 app.use(contactRouter);
+app.use(jobRouter);
 app.use(errors);
 
 const server = module.exports = app.listen(PORT, () => {
