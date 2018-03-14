@@ -244,7 +244,7 @@ describe('Company Routes', function() {
           done();
         });
     });
-    it('should return a 404 error when submitted without id', done => {
+    it('should return a 404 error when submitted with invalid id', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/1234`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
