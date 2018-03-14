@@ -14,29 +14,59 @@ const jobRouter = module.exports = Router();
 
 jobRouter.post('/api/profile/:profileId/company/:companyId/job', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/job');
-  if(!req.body) return next(createError(400, 'bad request'));
-
+  if(!req.body.title) return next(createError(400, 'bad request'));
+  
   Company.findByIdAndAddJob(req.params.companyId, req.body)
     .then( job => {
-      if (req.params.profileId === job.profileId.toString()) res.json(job);
+      if((req.params.profileId === job.profileId.toString()) && (req.params.companyId === job.companyId.toString())){
+        return res.json(job);
+      }
     })
     .catch(next); 
 });
 
 jobRouter.put('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId/company/:companyId/job/:jobId');
-
-  // insert route here
+  if(!req.body.title) return next(createError(400, 'bad request'));
+  Job.findByIdAndUpdate(req.params.jobId, req.body, {new:true})
+    .then( job =>{
+      if((req.params.profileId === job.profileId.toString()) && (req.params.companyId === job.companyId.toString())){
+        return res.json(job);
+      }
+    })
+    .catch(err => {
+      createError(404, err.message);
+      next();
+    });
 });
 
 jobRouter.get('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId/company/:companyId/job/:jobId');
 
-  // insert route here
+  Job.findById(req.params.jobId)
+    .then(job => {
+      if((req.params.profileId === job.profileId.toString()) && (req.params.companyId === job.companyId.toString())){
+        return res.json(job);
+      }
+    })
+    .catch(err => {
+      createError(404, err.message);
+      next();
+    });
 });
 
 jobRouter.delete('/api/profile/:profileId/company/:companyId/job', bearerAuth, jsonParser, function(req, res, next) {
   debug('DELETE: /api/profile/:profileId/company/:companyId/job/:jobId');
 
-  // insert route here
+  Company.findByIdAndRemoveJob(req.params.companyId, req.params.jobId)
+    .then(company =>{
+      return company;
+    })
+    .then( () => {
+      return Job.findByIdAndRemove(req.params.jobId);
+    })
+    .then( () => {
+      return res.sendStatus(204);
+    })
+    .catch(next);
 });

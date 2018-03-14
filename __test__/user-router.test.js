@@ -28,7 +28,7 @@ describe('User Auth Routes', function() {
           .end((err, res) => {
             if (err) return done(err);
             expect(res.status).toEqual(200);
-            // additional tests here
+            expect(typeof res.text).toEqual('string');
             done();
           });
       });
@@ -69,7 +69,7 @@ describe('User Auth Routes', function() {
           .end((err, res) => {
             if (err) return done(err);
             expect(res.status).toEqual(200);
-            // additional tests here
+            expect(typeof res.text).toEqual('string');
             done();
           });
       });
