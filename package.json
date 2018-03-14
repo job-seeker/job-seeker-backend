@@ -16,7 +16,7 @@
     "test2": "DEBUG='job-seeker*' jest -i --coverage company-route.test.js",
     "test3": "DEBUG='job-seeker*' jest -i --verbose contact-router.test.js",
 
-    "test4": "DEBUG='job-seeker*' jest -i user-router.test.js",
+    "test4": "DEBUG='job-seeker*' jest -i user-router.test.js"
 
   },
   "repository": {
