@@ -1,14 +1,11 @@
-## Job Seeker
+# Job Seeker
 
-### Status
+## Status
 [![Build Status](https://travis-ci.org/job-seeker/job-seeker-backend.svg?branch=staging)](https://travis-ci.org/job-seeker/job-seeker-backend)
 [![Coverage Status](https://coveralls.io/repos/github/job-seeker/job-seeker-backend/badge.svg)](https://coveralls.io/github/job-seeker/job-seeker-backend)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-### Database Diagram
-<h4 align="center"><img src="./images/job-seeker-ERD.png" target="_blank" height="400px"></h4>
-
-### Technology Used
+## Technology Used
 * **[Node.js](https://nodejs.org)**
   * Application dependencies:
     * [bcrypt](https://www.npmjs.com/package/bcrypt)
@@ -34,124 +31,129 @@
 * **[TravisCI](https://travis-ci.org/)**
 * **[Coveralls](https://coveralls.io)**
 
-### Routes
-#### _User_
-**POST**
+## Schema
+<h4 align="center"><img src="./images/job-seeker-ERD.png" target="_blank" height="500px"></h4>
+
+## Routes
+### _User_
+**POST**  
+Create new user with a `username`, `email`, and `password`.
 ```
-/api/signup
+POST /api/signup
 ```
 
-**GET**
+**GET**  
+Log in as an existing user with a `username` and `password`.
 ```
-/api/signin
-```
-
-#### Profile
-**POST**
-```
-/api/profile
+GET /api/signin
 ```
 
-**GET**
+### Profile
+**POST**  
 ```
-/api/profile/:profileId
-```
-
-**PUT**
-```
-/api/profile/:profileId
+POST /api/profile
 ```
 
-**DELETE**
+**GET**  
 ```
-/api/profile/:profileId
-```
-
-#### Company
-**POST**
-```
-/api/profile/:profileId/company
+GET /api/profile/:profileId
 ```
 
-**GET**
+**PUT**  
 ```
-/api/profile/:profileId/company/:companyId
-```
-
-**PUT**
-```
-/api/profile/:profileId/company/:companyId
+PUT /api/profile/:profileId
 ```
 
-**DELETE**
+**DELETE**  
 ```
-/api/profile/:profileId/company/:companyId
-```
-
-#### Job
-**POST**
-```
-/api/profile/:profileId/company/:companyId/job
+DELETE /api/profile/:profileId
 ```
 
-**GET**
+### Company
+**POST**  
 ```
-/api/profile/:profileId/company/:companyId/job/:jobId
-```
-
-**PUT**
-```
-/api/profile/:profileId/company/:companyId/job/:jobId
+POST /api/profile/:profileId/company
 ```
 
-**DELETE**
+**GET**  
 ```
-/api/profile/:profileId/company/:companyId/job/:jobId
-```
-
-#### Event
-**POST**
-```
-/api/profile/:profileId/company/:companyId/event
+GET /api/profile/:profileId/company/:companyId
 ```
 
-**GET**
+**PUT**  
 ```
-/api/profile/:profileId/company/:companyId/event/:eventId
-```
-
-**PUT**
-```
-/api/profile/:profileId/company/:companyId/event/:eventId
+PUT /api/profile/:profileId/company/:companyId
 ```
 
-**DELETE**
+**DELETE**  
 ```
-/api/profile/:profileId/company/:companyId/event/:eventId
-```
-
-#### Contact
-**POST**
-```
-/api/profile/:profileId/company/:companyId/contact
+DELETE /api/profile/:profileId/company/:companyId
 ```
 
-**GET**
+### Job
+**POST**  
 ```
-/api/profile/:profileId/company/:companyId/contact/:contactId
-```
-
-**PUT**
-```
-/api/profile/:profileId/company/:companyId/contact/:contactId
+POST /api/profile/:profileId/company/:companyId/job
 ```
 
-**DELETE**
+**GET**  
 ```
-/api/profile/:profileId/company/:companyId/contact/:contactId
+GET /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
-### Wireframes
+**PUT**  
+```
+PUT /api/profile/:profileId/company/:companyId/job/:jobId
+```
+
+**DELETE**  
+```
+DELETE /api/profile/:profileId/company/:companyId/job/:jobId
+```
+
+### Event
+**POST**  
+```
+POST /api/profile/:profileId/company/:companyId/event
+```
+
+**GET**  
+```
+GET /api/profile/:profileId/company/:companyId/event/:eventId
+```
+
+**PUT**  
+```
+PUT /api/profile/:profileId/company/:companyId/event/:eventId
+```
+
+**DELETE**  
+```
+DELETE /api/profile/:profileId/company/:companyId/event/:eventId
+```
+
+### Contact
+**POST**  
+```
+POST /api/profile/:profileId/company/:companyId/contact
+```
+
+**GET**  
+```
+GET /api/profile/:profileId/company/:companyId/contact/:contactId
+```
+
+**PUT**  
+```
+PUT /api/profile/:profileId/company/:companyId/contact/:contactId
+```
+
+**DELETE**  
+```
+DELETE /api/profile/:profileId/company/:companyId/contact/:contactId
+```
+
+## Wireframes
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Companies.png" target="_blank" height="300px"></kbd>
@@ -161,11 +163,11 @@
 <kbd><img src="./images/wireframes/Contact%20Page.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Job%20Posting%20Page.png" target="_blank" height="300px"></kbd> 
 
-### Contributors
+## Contributors
 [Ahmed Ali](https://github.com/AhmedAli93)  
 
 [Alex Bowers](https://github.com/warlordlizard)  
 
 [Melanie Cohen](https://github.com/melaniebcohen)  
 
-[Christian Miller](https://github.com/ruskeezy)  
+[Christian Miller](https://github.com/ruskeezy)
