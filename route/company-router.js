@@ -24,13 +24,17 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
 
 companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
   debug('PUT: /api/profile/:profileId/company/:companyId');
+  if (!req.body.companyName) return next(createError(400, 'bad request'));
   Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true})
     .then( company => { 
       if(req.params.profileId === company.profileId.toString()){
         return res.json(company);
       }
     })
-    .catch(err => next(err));
+    .catch(err => {
+      createError(404, err.message);
+      next();
+    });
 });
 
 companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next) {
@@ -38,13 +42,14 @@ companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, func
   
   Company.findById(req.params.companyId)
     .then(company => { 
-      console.log(typeof req.params.profileId);
-      console.log(typeof company.profileId);
       if (req.params.profileId === company.profileId.toString()) { 
         return res.json(company);
       }
     })
-    .catch(next);
+    .catch( err => {
+      createError(404, err.message);
+      next();
+    });
   
 });
 

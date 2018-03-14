@@ -57,7 +57,6 @@ describe('Company Routes', function() {
       });
       afterAll( done => {
         delete exampleProfile.userId;
-        console.log('temprofile:', this.tempProfile);
         done();
       });
       it('should return a company', done => {
@@ -65,9 +64,11 @@ describe('Company Routes', function() {
           .set({ Authorization: `Bearer ${this.tempToken}`})
           .send(exampleCompany)
           .end((err, res) => {
-            
-            
             expect(res.status).toEqual(200);
+            expect(res.body.companyName).toEqual(exampleCompany.companyName);
+            expect(res.body.website).toEqual(exampleCompany.website);
+            expect(res.body.profileId).toEqual(this.tempProfile._id.toString());
+            expect(res.body.userId).toEqual(this.tempUser._id.toString());
             done();
           });
       });
@@ -148,6 +149,44 @@ describe('Company Routes', function() {
           });
       });
     });
+    describe('with a wrong profileId but correct companyId', function() {
+      beforeAll(done => {
+        new User(exampleUser)
+          .generatePasswordHash(exampleUser.password)
+          .then(user => user.save())
+          .then(user => {
+            this.tempUser = user;
+            return user.generateToken();
+          })
+          .then(token => {
+            this.tempToken = token;
+            done();
+          })
+          .catch(done);
+      });
+      beforeAll(done => {
+        exampleProfile.userId = this.tempUser._id.toString();
+        new Profile(exampleProfile).save()
+          .then(profile => {
+            this.tempProfile = profile;
+            done();
+          })
+          .catch(done);
+      });
+      afterAll(done => {
+        delete exampleProfile.userId;
+        done();
+      });
+      it('should give an error', done => {
+        request.post(`${url}/api/profile/1234/company`)
+          .set({ Authorization: `Bearer ${this.tempToken}` })
+          .end((err, res) => {
+            expect(res.status).toEqual(400);
+            done();
+          });
+      });
+
+    });
   });
   describe('GET: /api/profile/:profileId/company/:companyId', function() {
     beforeAll(done => {
@@ -180,6 +219,10 @@ describe('Company Routes', function() {
         .then( company => {
           this.tempCompany = company;
           this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
           done();
         })
         .catch(done);
@@ -192,14 +235,17 @@ describe('Company Routes', function() {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          console.log('get res', res.body)
-          //console.log('tempProfile', this.tempProfile)
           expect(res.status).toEqual(200);
+          expect(res.body.companyName).toEqual(this.tempCompany.companyName);
+          expect(res.body.website).toEqual(this.tempCompany.website);
+          expect(res.body.profileId).toEqual(this.tempProfile._id.toString());
+          expect(res.body.userId).toEqual(this.tempUser._id.toString());
+          expect(this.tempProfile.companies).toContain(res.body._id);
           done();
         });
     });
     it('should return a 404 error when submitted without id', done => {
-      request.get(`${url}/api/profile/${this.tempProfile._id}/company`)
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/1234`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(404);
@@ -245,8 +291,11 @@ describe('Company Routes', function() {
         .then(company => {
           this.tempCompany = company;
           this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
           done();
-          console.log('tempcomp', company);
         })
         .catch(done);
     });
@@ -260,14 +309,41 @@ describe('Company Routes', function() {
         .send(updatedCompany)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          console.log(res.body);
-          //console.log('temprofile', this.tempProfile);
           expect(res.status).toEqual(200);
           expect(res.body.companyName).toEqual(updatedCompany.companyName);
-          expect(res.body.website).toEqual(exampleCompany.website);
+          expect(res.body.website).toEqual(this.tempCompany.website);
+          expect(res.body.profileId).toEqual(this.tempProfile._id.toString());
+          expect(res.body.userId).toEqual(this.tempUser._id.toString());
+          expect(this.tempProfile.companies).toContain(res.body._id);
           done();
         });
-    
+    });
+    it('should return a 404 error when submitted without id', done => {
+      let updatedCompany = { companyName: 'FaceLook' };
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/1234`)
+        .send(updatedCompany)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      let updatedCompany = { companyName: 'FaceLook' };
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
+        .send(updatedCompany)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
+    });
+    it('should return a 400 error', done => {
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          done();
+        });
     });
   
   });
