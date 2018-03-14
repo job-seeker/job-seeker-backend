@@ -81,10 +81,10 @@ describe('Event Routes', function () {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .send(exampleEvent)
         .end((err, res) => {
-          console.log(exampleEvent);
-          console.log(res.body);
-          console.log(this.tempProfile._id);
-          console.log(this.tempCompany._id);
+          // console.log(exampleEvent);
+          // console.log(res.body);
+          // console.log(this.tempProfile._id);
+          // console.log(this.tempCompany._id);
           expect(res.status).toEqual(200);
           expect(res.body.eventTitle).toEqual(exampleEvent.eventTitle);
           expect(res.body.eventType).toEqual(exampleEvent.eventType);
@@ -181,10 +181,10 @@ describe('Event Routes', function () {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/event/${this.tempEvent._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          console.log(exampleEvent);
-          console.log(res.body);
-          console.log(this.tempProfile._id);
-          console.log(this.tempCompany);
+          // console.log(exampleEvent);
+          // console.log(res.body);
+          // console.log(this.tempProfile._id);
+          // console.log(this.tempCompany);
           
           expect(res.status).toEqual(200);
           expect(res.body.eventTitle).toEqual(exampleEvent.eventTitle);

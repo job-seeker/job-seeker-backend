@@ -70,7 +70,6 @@ describe('User Auth Routes', function() {
             if (err) return done(err);
             expect(res.status).toEqual(200);
             expect(typeof res.text).toEqual('string');
-            console.log(res.text);
             done();
           });
       });

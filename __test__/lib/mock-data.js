@@ -23,6 +23,11 @@ let exampleCompany = {
   website: faker.internet.url(),
 };
 
+let exampleCompany2 = {
+  companyName: faker.company.companyName(),
+  website: faker.internet.url(),
+};
+
 let exampleJob = {
   title: faker.name.jobTitle(),
   link: faker.internet.url(),
@@ -50,6 +55,7 @@ module.exports = {
   'exampleProfile': exampleProfile,
   'updatedProfile': updatedProfile,
   'exampleCompany': exampleCompany,
+  'exampleCompany2': exampleCompany2,
   'exampleJob': exampleJob,
   'exampleContact': exampleContact,
   'exampleEvent': exampleEvent,

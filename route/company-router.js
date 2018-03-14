@@ -50,7 +50,17 @@ companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, func
       createError(404, err.message);
       next();
     });
-  
+});
+
+companyRouter.get('/api/profile/:profileId/company', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/:profileId/company');
+
+  Profile.findById(req.params.profileId)
+    .populate('companies')
+    .then( companies => {
+      return res.json(companies);
+    })
+    .catch(err => next(createError(404, err.message)));
 });
 
 companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
