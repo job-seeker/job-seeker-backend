@@ -31,161 +31,70 @@ describe('Company Routes', function() {
       .catch(done);
   });
   describe('POST: /api/profile/:profileId/company', function() {
-    describe('with a valid token and data', function() {
-      beforeAll( done => {
-        new User(exampleUser)
-          .generatePasswordHash(exampleUser.password)
-          .then( user => user.save())
-          .then( user => {
-            this.tempUser = user;
-            return user.generateToken();
-          })
-          .then ( token => {
-            this.tempToken = token;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll( done => {
-        exampleProfile.userId = this.tempUser._id.toString();
-        new Profile(exampleProfile).save()
-          .then( profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      afterAll( done => {
-        delete exampleProfile.userId;
-        done();
-      });
-      it('should return a company', done => {
-        request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
-          .set({ Authorization: `Bearer ${this.tempToken}`})
-          .send(exampleCompany)
-          .end((err, res) => {
-            expect(res.status).toEqual(200);
-            expect(res.body.companyName).toEqual(exampleCompany.companyName);
-            expect(res.body.website).toEqual(exampleCompany.website);
-            expect(res.body.profileId).toEqual(this.tempProfile._id.toString());
-            expect(res.body.userId).toEqual(this.tempUser._id.toString());
-            done();
-          });
-      });
-        
-
+    
+    beforeAll( done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then ( token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
     });
-    describe('without valid token', function() {
-      beforeAll(done => {
-        new User(exampleUser)
-          .generatePasswordHash(exampleUser.password)
-          .then(user => user.save())
-          .then(user => {
-            this.tempUser = user;
-            return user.generateToken();
-          })
-          .then(token => {
-            this.tempToken = token;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll(done => {
-        exampleProfile.userId = this.tempUser._id.toString();
-        new Profile(exampleProfile).save()
-          .then(profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      afterAll(done => {
-        delete exampleProfile.userId;
-        done();
-      });
-      it('should return 401 status', done => {
-        request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
-          .send(exampleCompany)
-          .end((err, res) => {
-            expect(res.status).toEqual(401);
-            done();
-          });
-      });
+    beforeAll( done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
     });
-    describe('without valid body', function() {
-      beforeAll(done => {
-        new User(exampleUser)
-          .generatePasswordHash(exampleUser.password)
-          .then(user => user.save())
-          .then(user => {
-            this.tempUser = user;
-            return user.generateToken();
-          })
-          .then(token => {
-            this.tempToken = token;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll(done => {
-        exampleProfile.userId = this.tempUser._id.toString();
-        new Profile(exampleProfile).save()
-          .then(profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      afterAll(done => {
-        delete exampleProfile.userId;
-        done();
-      });
-      it('should return a 400 error', done => {
-        request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
-          .set({ Authorization: `Bearer ${this.tempToken}` })
-          .end((err, res) => {
-            expect(res.status).toEqual(400);
-            done();
-          });
-      });
+    afterAll( done => {
+      delete exampleProfile.userId;
+      done();
     });
-    describe('with a wrong profileId but correct companyId', function() {
-      beforeAll(done => {
-        new User(exampleUser)
-          .generatePasswordHash(exampleUser.password)
-          .then(user => user.save())
-          .then(user => {
-            this.tempUser = user;
-            return user.generateToken();
-          })
-          .then(token => {
-            this.tempToken = token;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll(done => {
-        exampleProfile.userId = this.tempUser._id.toString();
-        new Profile(exampleProfile).save()
-          .then(profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      afterAll(done => {
-        delete exampleProfile.userId;
-        done();
-      });
-      it('should give an error', done => {
-        request.post(`${url}/api/profile/1234/company`)
-          .set({ Authorization: `Bearer ${this.tempToken}` })
-          .end((err, res) => {
-            expect(res.status).toEqual(400);
-            done();
-          });
-      });
-
+    it('should return a company with a valid token and data', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
+        .set({ Authorization: `Bearer ${this.tempToken}`})
+        .send(exampleCompany)
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body.companyName).toEqual(exampleCompany.companyName);
+          expect(res.body.website).toEqual(exampleCompany.website);
+          expect(res.body.profileId).toEqual(this.tempProfile._id.toString());
+          expect(res.body.userId).toEqual(this.tempUser._id.toString());
+          done();
+        });
+    });
+    it('should return a 401 error without valid token', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
+        .send(exampleCompany)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
+    });
+    it('should return a 400 error without valid body', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/company`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          done();
+        });
+    });
+    it('should return an error with a wrong profileId but correct companyId', done => {
+      request.post(`${url}/api/profile/1234/company`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          done();
+        });
     });
   });
   describe('GET: /api/profile/:profileId/company/:companyId', function() {
@@ -252,7 +161,7 @@ describe('Company Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -417,7 +326,7 @@ describe('Company Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       let updatedCompany = { companyName: 'FaceLook' };
       request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
         .send(updatedCompany)
@@ -436,54 +345,52 @@ describe('Company Routes', function() {
     });
   });
   describe('DELETE: /api/profile/:profileId/company/:companyId', function () {
-    describe('with a valid token and data', function() {
-      beforeAll(done => {
-        new User(exampleUser)
-          .generatePasswordHash(exampleUser.password)
-          .then(user => user.save())
-          .then(user => {
-            this.tempUser = user;
-            return user.generateToken();
-          })
-          .then(token => {
-            this.tempToken = token;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll(done => {
-        exampleProfile.userId = this.tempUser._id.toString();
-        new Profile(exampleProfile).save()
-          .then(profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll( done => {
-        exampleCompany.userId = this.tempUser._id.toString();
-        exampleCompany.profileId = this.tempProfile._id.toString();
-        new Company(exampleCompany).save()
-          .then( company => {
-            this.tempCompany = company;
-            this.tempProfile.companies.push(this.tempCompany._id);
-            return this.tempProfile.save();
-          })
-          .then( profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      it('should delete a company', done => {
-        request.delete(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}`)
-          .set({ Authorization: `Bearer ${this.tempToken}` })
-          .end((err, res) => {
-            expect(res.status).toEqual(204);
-            expect(typeof res.body).toEqual('object');
-            done();
-          });
-      });
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then( company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    it('should delete a company', done => {
+      request.delete(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(204);
+          expect(typeof res.body).toEqual('object');
+          done();
+        });
     });
   });
 });

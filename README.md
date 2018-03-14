@@ -88,7 +88,7 @@ Fetch an existing user's profile with a valid token and the user's `profileId`.
 GET /api/profile/:profileId
 ```
 From this GET request, user will receive the following:
-```
+```javascript
 {
   name: 'Wanda Maximoff',
   email: 'wanda@avengers.com',
