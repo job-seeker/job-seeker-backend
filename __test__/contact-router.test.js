@@ -346,6 +346,73 @@ describe('Contact Routes', function() {
   });
 
   describe('DELETE : /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
+    beforeAll( done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then( token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then( company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleContact.userId = this.tempUser._id.toString();
+      exampleContact.profileId = this.tempProfile._id.toString();
+      exampleContact.companyId = this.tempCompany._id.toString();
+      new Contact(exampleContact).save()
+        .then( contact => {
+          this.tempContact = contact;
+          this.tempCompany.contacts.push(this.tempContact._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
 
+    describe('with a valid delete request', () => {
+      it('should delete a company and return a 204', done => {
+        request.delete(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+          .set({
+            Authorization: `Bearer ${this.tempToken}`,
+          })
+          .end((err, res) => {
+            expect(res.status).toEqual(204);
+            expect(typeof res.body).toEqual('object');
+            done();
+          });
+      });
+    });
   });
 });
