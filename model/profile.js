@@ -34,3 +34,17 @@ Profile.findByIdAndAddCompany = function(id, company) {
     })
     .catch(err => Promise.reject(createError(404, err.message)));
 };
+
+Profile.findByIdAndRemoveCompany = function(profileId, companyId) {
+  debug('findByIdAndRemoveCompany');
+
+  return Profile.findById(profileId)
+    .then( profile => {
+      for (let i = 0; i < profile.companies.length; i++) {
+        if (profile.companies[i].toString() === companyId) {
+          profile.companies.splice(i, 1);
+          return profile.save();
+        }
+      }
+    });
+};

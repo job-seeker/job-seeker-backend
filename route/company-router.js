@@ -53,19 +53,18 @@ companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, func
   
 });
 
-// companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
-//   debug('DELETE: /api/profile/:profileId/company/:companyId');
-//   Company.findById(req.params.companyId)
-//     .then(company => {
-//       if (req.params.profileId === company.profileId.toString()) { 
+companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
+  debug('DELETE: /api/profile/:profileId/company/:companyId');
 
-//   Company.findByIdAndRemove(req.params.companyId, bearerAuth)
-//     .then(company => { 
-//       if (req.params.profileId === company.profileId.toString()) { 
-//         return res.send(204);
-//       }
-//     })
-//     .catch(next);
-
-//////make delete method on profile that removes from companies array
-// });
+  Profile.findByIdAndRemoveCompany(req.params.profileId, req.params.companyId)
+    .then( profile => {
+      return profile;
+    })
+    .then( () => {
+      return Company.findByIdAndRemove(req.params.companyId);
+    })
+    .then( () => {
+      return res.sendStatus(204);
+    })
+    .catch(next);
+});

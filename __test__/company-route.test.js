@@ -345,7 +345,56 @@ describe('Company Routes', function() {
           done();
         });
     });
-  
   });
-  
+  describe('DELETE: /api/profile/:profileId/company/:companyId', function () {
+    describe('with a valid token and data', function() {
+      beforeAll(done => {
+        new User(exampleUser)
+          .generatePasswordHash(exampleUser.password)
+          .then(user => user.save())
+          .then(user => {
+            this.tempUser = user;
+            return user.generateToken();
+          })
+          .then(token => {
+            this.tempToken = token;
+            done();
+          })
+          .catch(done);
+      });
+      beforeAll(done => {
+        exampleProfile.userId = this.tempUser._id.toString();
+        new Profile(exampleProfile).save()
+          .then(profile => {
+            this.tempProfile = profile;
+            done();
+          })
+          .catch(done);
+      });
+      beforeAll( done => {
+        exampleCompany.userId = this.tempUser._id.toString();
+        exampleCompany.profileId = this.tempProfile._id.toString();
+        new Company(exampleCompany).save()
+          .then( company => {
+            this.tempCompany = company;
+            this.tempProfile.companies.push(this.tempCompany._id);
+            return this.tempProfile.save();
+          })
+          .then( profile => {
+            this.tempProfile = profile;
+            done();
+          })
+          .catch(done);
+      });
+      it('should delete a company', done => {
+        request.delete(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}`)
+          .set({ Authorization: `Bearer ${this.tempToken}` })
+          .end((err, res) => {
+            expect(res.status).toEqual(204);
+            expect(typeof res.body).toEqual('object');
+            done();
+          });
+      });
+    });
+  });
 });
