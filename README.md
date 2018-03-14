@@ -35,120 +35,171 @@
 <h4 align="center"><img src="./images/job-seeker-ERD.png" target="_blank" height="500px"></h4>
 
 ## Routes
-### _User_
-**POST**  
+### **_User_**
+#### POST
 Create new user with a `username`, `email`, and `password`.
 ```
 POST /api/signup
 ```
+From this POST request, user will receive the following:
+```
+{
+  res.text: < token >
+}
+```
+- With no request body, the server will return a 400 error  
 
-**GET**  
+#### GET
 Log in as an existing user with a `username` and `password`.
 ```
 GET /api/signin
 ```
+From this GET request, user will receive the following:
+```
+{
+  res.text: < token >
+}
+```
+- With an invalid request body, the server will return a 401 error
+- With an invalid username and/or password, the server will return a 500 error
 
-### Profile
+### **_Profile_**
 **POST**  
+Create a new profile with a valid token, existing `username` and `password`, as well as the new user's `name` and `email`.
 ```
 POST /api/profile
 ```
+From this POST request, user will receive the following:
+```
+{ 
+  name: 'Peter Parker',
+  email: 'peter.parker@definitelynotspiderman.com',
+  companies: [],
+  userId: ' < userId >',
+  _id: < new profileId >,
+}
+```
+- With no request body, the server will return a 400 error
+- With an invalid username and/or password, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
-**GET**  
+#### GET
+Fetch an existing user's profile with a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId
 ```
+From this GET request, user will receive the following:
+```
+{
+  name: 'Wanda Maximoff',
+  email: 'wanda@avengers.com',
+  companies: [],
+  userId: < userId >,
+  _id: < queried profileId >,
+}
+```
+- With an invalid profile ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
-**PUT**  
+#### PUT
+Update an existing user's profile with a valid token and the user's `profileId`, as well as the user's new `name` and `email`.
 ```
 PUT /api/profile/:profileId
 ```
-
-**DELETE**  
+From this GET request, user will receive the following:
 ```
-DELETE /api/profile/:profileId
+{ 
+  name: 'Peter Parker',
+  email: 'peter.parker@avengers.com',
+  companies: [],
+  userId: < userId >,
+  _id: < queried profileId >,
+}
 ```
-
-### Company
-**POST**  
+- With an invalid profile ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
+- Without a request body, the server will return a 400 error
+  
+### **_Company_**
+#### POST
 ```
 POST /api/profile/:profileId/company
 ```
 
-**GET**  
+#### GET
 ```
 GET /api/profile/:profileId/company/:companyId
 ```
 
-**PUT**  
+#### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId
 ```
 
-**DELETE**  
+#### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId
 ```
 
 ### Job
-**POST**  
+#### POST
 ```
 POST /api/profile/:profileId/company/:companyId/job
 ```
 
-**GET**  
+#### GET
 ```
 GET /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
-**PUT**  
+#### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
-**DELETE**  
+#### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
-### Event
-**POST**  
+### **_Event_**
+#### POST
 ```
 POST /api/profile/:profileId/company/:companyId/event
 ```
 
-**GET**  
+#### GET
 ```
 GET /api/profile/:profileId/company/:companyId/event/:eventId
 ```
 
-**PUT**  
+#### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/event/:eventId
 ```
 
-**DELETE**  
+#### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/event/:eventId
 ```
 
-### Contact
-**POST**  
+### **_Contact_**
+#### POST
 ```
 POST /api/profile/:profileId/company/:companyId/contact
 ```
 
-**GET**  
+#### GET
 ```
 GET /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 
-**PUT**  
+#### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 
-**DELETE**  
+#### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
