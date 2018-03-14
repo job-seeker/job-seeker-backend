@@ -81,10 +81,6 @@ describe('Event Routes', function () {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .send(exampleEvent)
         .end((err, res) => {
-          // console.log(exampleEvent);
-          // console.log(res.body);
-          // console.log(this.tempProfile._id);
-          // console.log(this.tempCompany._id);
           expect(res.status).toEqual(200);
           expect(res.body.eventTitle).toEqual(exampleEvent.eventTitle);
           expect(res.body.eventType).toEqual(exampleEvent.eventType);
@@ -177,15 +173,10 @@ describe('Event Routes', function () {
       delete exampleProfile.userId;
       done();
     });
-    it('should return a company when provided valid token and body', done => {
+    it('should return an event when provided valid token and body', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/event/${this.tempEvent._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          // console.log(exampleEvent);
-          // console.log(res.body);
-          // console.log(this.tempProfile._id);
-          // console.log(this.tempCompany);
-          
           expect(res.status).toEqual(200);
           expect(res.body.eventTitle).toEqual(exampleEvent.eventTitle);
           expect(res.body.eventType).toEqual(exampleEvent.eventType);
@@ -206,6 +197,288 @@ describe('Event Routes', function () {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/event/${this.tempEvent._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/allProfileEvents', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleEvent.userId = this.tempUser._id.toString();
+      exampleEvent.profileId = this.tempProfile._id.toString();
+      exampleEvent.companyId = this.tempCompany._id.toString();
+      new Event(exampleEvent).save()
+        .then( event => {
+          this.tempEvent = event;
+          this.tempCompany.events.push(this.tempEvent._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated events when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body[0].eventType).toEqual(this.tempEvent.eventType);
+          expect(res.body[0].eventStatus).toEqual(this.tempEvent.eventStatus);
+          expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/12345/allProfileEvents`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('NotFoundError');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/allProfileEvents', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleEvent.userId = this.tempUser._id.toString();
+      exampleEvent.profileId = this.tempProfile._id.toString();
+      exampleEvent.companyId = this.tempCompany._id.toString();
+      new Event(exampleEvent).save()
+        .then( event => {
+          this.tempEvent = event;
+          this.tempCompany.events.push(this.tempEvent._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated events when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body[0].eventType).toEqual(this.tempEvent.eventType);
+          expect(res.body[0].eventStatus).toEqual(this.tempEvent.eventStatus);
+          expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/12345/allProfileEvents`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('NotFoundError');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/company/:companyId/allCompanyEvents', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleEvent.userId = this.tempUser._id.toString();
+      exampleEvent.profileId = this.tempProfile._id.toString();
+      exampleEvent.companyId = this.tempCompany._id.toString();
+      new Event(exampleEvent).save()
+        .then( event => {
+          this.tempEvent = event;
+          this.tempCompany.events.push(this.tempEvent._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleEvent.userId = this.tempUser._id.toString();
+      exampleEvent.profileId = this.tempProfile._id.toString();
+      exampleEvent.companyId = this.tempCompany._id.toString();
+      exampleEvent.eventTitle = 'Test event title';
+      new Event(exampleEvent).save()
+        .then( event => {
+          this.tempEvent = event;
+          this.tempCompany.events.push(this.tempEvent._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated events when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/allCompanyEvents`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body[0].eventType).toEqual(this.tempEvent.eventType);
+          expect(res.body[0].eventStatus).toEqual(this.tempEvent.eventStatus);
+          expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
+          expect(res.body[1].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents/12345/allCompanyEvents`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/allCompanyEvents`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
