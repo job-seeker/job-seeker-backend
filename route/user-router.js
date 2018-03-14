@@ -11,7 +11,7 @@ const userRouter = module.exports = Router();
 
 userRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST: /api/signup');
-  if(!req.body.username) return next(createError( 400, 'ValidationError'));
+  if(!req.body.username) return next(createError(400, 'ValidationError'));
 
   let password = req.body.password;
   delete req.body.password;
@@ -28,6 +28,7 @@ userRouter.get('/api/signin', basicAuth, function(req, res, next) {
   debug('GET: /api/signin');
 
   User.findOne({ username: req.auth.username })
+    .then( user => user.comparePasswordHash(req.auth.password))
     .then( user => user.generateToken())
     .then( token => res.send(token))
     .catch(next);
