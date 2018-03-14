@@ -367,7 +367,7 @@ describe('Event Routes', function () {
         })
         .catch(done);
     });
-    it('should delete a company with a valid token and data', done => {
+    it('should delete a Event with a valid token and data', done => {
       request.delete(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}/event/${this.tempEvent._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
