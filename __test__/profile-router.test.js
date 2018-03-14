@@ -71,7 +71,6 @@ describe('Profile routes', function() {
 
     it('should return a 400 error if no request body was provided', done => {
       request.post(`${url}/api/profile`)
-        .send({})
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
