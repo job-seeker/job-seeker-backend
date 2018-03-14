@@ -121,3 +121,17 @@ Company.findByIdAndRemoveEvent = function (companyId, eventId) {
       }
     });
 };
+
+Company.findByIdAndRemoveContact = function(companyId, contactId) {
+  debug('findByIdAndRemoveContact');
+
+  return Company.findById(companyId)
+    .then(company => {
+      for (let i = 0; i < company.contacts.length; i ++) {
+        if (company.contacts[i].toString() === contactId) {
+          company.contacts.splice(i, 1);
+          return company.save();
+        }
+      }
+    });
+};
