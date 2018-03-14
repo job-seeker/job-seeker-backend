@@ -33,7 +33,7 @@ Company.findByIdAndAddJob = function(id, job) {
   
   return Company.findById(id)
     .then( company => {
-      console.log(company)
+      console.log(this.tempCompany);
       job.userId = company.userId;
       job.profileId = company.profileId;
       job.companyId = company._id;
@@ -51,6 +51,20 @@ Company.findByIdAndAddJob = function(id, job) {
     .catch( err => Promise.reject(createError(404, err.message)));
 };
 
+Company.findByIdAndRemoveJob = function(companyId, jobId){
+  debug('findByIdAndRemoveJob');
+
+  return Company.findById(companyId)
+    .then(company => {
+      for(let i = 0; i < company.jobPosting.length; i++){
+        if(company.jobPosting[i].toString() === jobId){
+          company.jobPosting.splice(i,1);
+          return company.save();
+        }
+      }
+    });
+};
+          
 Company.findByIdAndAddContact = function(id, contact) {
   debug('findByIdAndAddContact');
   
