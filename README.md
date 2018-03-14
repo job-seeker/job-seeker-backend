@@ -6,6 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Database Diagram
+<h4 align="center"><img src="./images/job-seeker-ERD.png" target="_blank" height="400px"></h4>
 
 ### Technology Used
 * **[Node.js](https://nodejs.org)**
@@ -151,14 +152,14 @@
 ```
 
 ### Wireframes
-<kbd><img src="https://raw.githubusercontent.com/job-seeker/job-seeker-backend/staging/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
-<kbd><img src="https://raw.githubusercontent.com/job-seeker/job-seeker-backend/staging/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
-<kbd><img src="https://github.com/job-seeker/job-seeker-backend/blob/staging/wireframes/Companies.png" target="_blank" height="300px"></kbd>
-<kbd><img src="https://github.com/job-seeker/job-seeker-backend/blob/staging/wireframes/Company%20Page.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Companies.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Company%20Page.png" target="_blank" height="300px"></kbd>
 
-<kbd><img src="https://raw.githubusercontent.com/job-seeker/job-seeker-backend/staging/wireframes/Event%20Page.png" target="_blank" height="300px"></kbd>
-<kbd><img src="https://raw.githubusercontent.com/job-seeker/job-seeker-backend/staging/wireframes/Contact%20Page.png" target="_blank" height="300px"></kbd>
-<kbd><img src="https://raw.githubusercontent.com/job-seeker/job-seeker-backend/staging/wireframes/Job%20Posting%20Page.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Event%20Page.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Contact%20Page.png" target="_blank" height="300px"></kbd>
+<kbd><img src="./images/wireframes/Job%20Posting%20Page.png" target="_blank" height="300px"></kbd> 
 
 ### Contributors
 [Ahmed Ali](https://github.com/AhmedAli93)  
