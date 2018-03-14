@@ -92,7 +92,7 @@ describe('Job Routes', function() {
           done();
         });
     });
-    it('should return 401 status without valid token', done => {
+    it('should return a 401 error without valid token', done => {
       request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/job`)
         .send(exampleJob)
         .end((err, res) => {
@@ -183,7 +183,7 @@ describe('Job Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/job/${this.tempJob._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -274,7 +274,7 @@ describe('Job Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       let updatedJob = { title: 'newTitle' };
       request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/job/${this.tempJob._id}`)
         .send(updatedJob)
