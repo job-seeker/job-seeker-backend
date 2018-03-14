@@ -114,6 +114,19 @@ describe('Contact Routes', function() {
           });
       });
     });
+    describe('with an invalid request', () => {
+      it('should return a 404 error', done => {
+        request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contactz`)
+          .send(exampleContact)
+          .set({
+            Authorization: `Bearer ${this.tempToken}`,
+          })
+          .end((err, res) => {
+            expect(res.status).toEqual(404);
+            done();
+          });
+      });
+    });
   });
 
   describe('GET : /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
