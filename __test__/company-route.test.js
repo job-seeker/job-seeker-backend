@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const User = require('../model/user.js');
 const Profile = require('../model/profile.js');
 const Company = require('../model/company.js');
-const { exampleUser, exampleProfile, exampleCompany } = require('./lib/mock-data.js');
+const { exampleUser, exampleProfile, exampleCompany, exampleCompany2 } = require('./lib/mock-data.js');
 
 const url = `http://localhost:${PORT}`;
 
@@ -256,6 +256,95 @@ describe('Company Routes', function() {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/company', function() {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then( company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      // instantiating second example company in order to test population of multiple companies
+      exampleCompany2.userId = this.tempUser._id.toString();
+      exampleCompany2.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany2).save()
+        .then( company => {
+          this.tempCompany2 = company;
+          this.tempProfile.companies.push(this.tempCompany2._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return a company when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(typeof res.body.companies).toEqual('object');
+          expect(res.body.name).toEqual(this.tempProfile.name);
+          expect(res.body.companies[0].profileId).toEqual(this.tempProfile._id.toString());
+          expect(res.body.companies[1].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid profile id', done => {
+      request.get(`${url}/api/profile/12345/company`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('NotFoundError');
+          done();
+        });
+    });
+    it('should return a 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });

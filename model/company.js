@@ -4,7 +4,7 @@ const debug = require('debug')('job-seeker:company');
 const createError = require('http-errors');
 const Job = require('./job.js');
 const Contact = require('./contact.js');
-const Event = require('./event.js')
+const Event = require('./event.js');
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -33,7 +33,6 @@ Company.findByIdAndAddJob = function(id, job) {
   
   return Company.findById(id)
     .then( company => {
-      console.log(this.tempCompany);
       job.userId = company.userId;
       job.profileId = company.profileId;
       job.companyId = company._id;
@@ -96,12 +95,10 @@ Company.findByIdAndAddEvent = function(id, event) {
       event.profileId = company.profileId;
       event.companyId = company._id;
       this.tempCompany = company;
-      console.log(event)
       return new Event(event).save();
     })
     .then( event => {
       this.tempCompany.events.push(event._id);
-      console.log(this.tempCompany)
       this.tempEvent = event;
       return this.tempCompany.save();
     })
