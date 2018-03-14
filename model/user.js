@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
-const Promise = require('bluebird');
 const debug = require('debug')('job-seeker:user');
 
 const Schema = mongoose.Schema;
