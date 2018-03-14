@@ -10,9 +10,9 @@ const cors = require('cors');
 const userRouter = require('./route/user-router.js');
 const profileRouter = require('./route/profile-router.js');
 const companyRouter = require('./route/company-router.js');
-const contactRouter = require('./route/contact-router');
+const contactRouter = require('./route/contact-router.js');
 const jobRouter = require('./route/job-router.js');
-const eventRouter = require('./route/event-router');
+const eventRouter = require('./route/event-router.js');
 const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
