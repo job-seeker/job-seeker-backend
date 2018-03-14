@@ -7,7 +7,7 @@ const debug = require('debug')('job-seeker:contact-router');
 
 
 const Company = require('../model/company.js');
-const Contact = require('../model/Contact.js');
+const Contact = require('../model/contact.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const contactRouter = module.exports = Router();
