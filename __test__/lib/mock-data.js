@@ -38,6 +38,13 @@ let exampleContact = {
   linkedIn: faker.internet.url(),
 };
 
+// let days = 5;
+let exampleEvent = {
+  eventType: 'Interview',
+  eventTitle: 'Interview with ' + faker.name.firstName(),
+  eventDate: faker.date.recent(1),
+};
+
 module.exports = {
   'exampleUser': exampleUser,
   'exampleProfile': exampleProfile,
@@ -45,4 +52,5 @@ module.exports = {
   'exampleCompany': exampleCompany,
   'exampleJob': exampleJob,
   'exampleContact': exampleContact,
+  'exampleEvent': exampleEvent,
 };
