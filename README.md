@@ -184,32 +184,104 @@ DELETE /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 POST /api/profile/:profileId/company/:companyId/event
 ```
+From this POST request, user will recieve the following response:
+```javascript
+    { eventType: 'Interview',
+      eventTitle: 'Interview with Jewel',
+      eventDate: '2018-03-15T01:51:17.262Z',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      created: '2018-03-15T17:32:26.292Z',
+      _id: '<._id>',
+      __v: 0 }
+```
 
 #### GET
 ```
 GET /api/profile/:profileId/company/:companyId/event/:eventId
+```
+From this GET request, user will recieve the following response: 
+```javascript
+    { created: '2018-03-15T17:32:26.502Z',
+      _id: '5aaaae2ae7120b5c4fad8f31',
+      eventType: 'Interview',
+      eventTitle: 'Interview with Jewel',
+      eventDate: '2018-03-15T01:51:17.262Z',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      __v: 0 }
 ```
 
 Fetch _all_ events associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/allProfileEvents
 ```
+From this GET request, user will recieve the following response:
+```javascript
+    [ { created: '2018-03-15T17:32:26.635Z',
+        _id: '5aaaae2ae7120b5c4fad8f35',
+        eventType: 'Interview',
+        eventTitle: 'Interview with Jewel',
+        eventDate: '2018-03-15T01:51:17.262Z',
+        userId: '<userId>',
+        profileId: '<profileId>',
+        companyId: '<companyId>',
+        __v: 0 } ]
+```
 
 Fetch _all_ events associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
 ```
 GET: /api/profile/:profileId/company/:companyId/allCompanyEvents
+```
+From this GET request, user will recieve the following response: 
+```javascript
+    [ { created: '2018-03-15T17:32:26.847Z',
+        _id: '5aaaae2ae7120b5c4fad8f3d',
+        eventType: 'Interview',
+        eventTitle: 'Interview with Jewel',
+        eventDate: '2018-03-15T01:51:17.262Z',
+        userId: '<userId>',
+        profileId: '<profileId>',
+        companyId: '<companyId>',
+        __v: 0 },
+      { created: '2018-03-15T17:32:26.849Z',
+        _id: '5aaaae2ae7120b5c4fad8f3e',
+        eventType: 'Interview',
+        eventTitle: 'Test event title',
+        eventDate: '2018-03-15T01:51:17.262Z',
+        userId: '<userId>',
+        profileId: '<profileId>',
+        companyId: '<companyId>',
+        __v: 0 } ]
 ```
 
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/event/:eventId
 ```
+From this PUT request, user will recieve the following response:
+```javascript
+    { created: '2018-03-15T17:32:26.954Z',
+      _id: '5aaaae2ae7120b5c4fad8f42',
+      eventType: 'Interview',
+      eventTitle: 'drinks',
+      eventDate: '2018-03-15T01:51:17.262Z',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      __v: 0 }
+```
 
 #### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/event/:eventId
 ```
-
+From this DELETE request, user will recieve the following response: 
+```javascript
+    {}
+```
 ### **_Contact_**
 #### POST
 ```
@@ -222,9 +294,9 @@ From this POST request, user will recieve the following response:
       email: 'Oleta_Berge74@yahoo.com',
       phone: '515-164-8293',
       linkedIn: 'https://krystal.name',
-      userId: '5aaaa9376720a65bb2904e04',
-      profileId: '5aaaa9376720a65bb2904e05',
-      companyId: '5aaaa9376720a65bb2904e06',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
       created: '2018-03-15T17:11:19.793Z',
       _id: '5aaaa9376720a65bb2904e07',
       __v: 0 }
@@ -242,9 +314,9 @@ From this GET request, user will recieve the following response:
       email: 'Oleta_Berge74@yahoo.com',
       phone: '515-164-8293',
       linkedIn: 'https://krystal.name',
-      userId: '5aaaa9376720a65bb2904e08',
-      profileId: '5aaaa9376720a65bb2904e09',
-      companyId: '5aaaa9376720a65bb2904e0a',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
       __v: 0 }
 ```
 #### PUT
@@ -260,9 +332,9 @@ From this PUT request, user will recieve the following response:
       email: 'Oleta_Berge74@yahoo.com',
       phone: '515-164-8293',
       linkedIn: 'https://krystal.name',
-      userId: '5aaaa9386720a65bb2904e0c',
-      profileId: '5aaaa9386720a65bb2904e0d',
-      companyId: '5aaaa9386720a65bb2904e0e',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
       __v: 0 }
 ```
 
