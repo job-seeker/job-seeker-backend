@@ -403,53 +403,203 @@ User will not receive any data, but should expect a 204 status.
 ```
 POST /api/profile/:profileId/company/:companyId/event
 ```
+From this POST request, user will recieve the following response:
+```javascript
+    { eventType: 'Interview',
+      eventTitle: 'Interview with Jewel',
+      eventDate: '2018-03-15T01:51:17.262Z',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      created: '2018-03-15T17:32:26.292Z',
+      _id: '<._id>',
+      __v: 0 }
+```
+ - With an invalid token, the server will return a 401 error
+ - With an invalid body, the server will return a 400 error
+ - With an invalid request, the server will return a 404 error
+
 
 #### GET
 ```
 GET /api/profile/:profileId/company/:companyId/event/:eventId
 ```
+From this GET request, user will recieve the following response: 
+```javascript
+    { created: '2018-03-15T17:32:26.502Z',
+      _id: '5aaaae2ae7120b5c4fad8f31',
+      eventType: 'Interview',
+      eventTitle: 'Interview with Jewel',
+      eventDate: '2018-03-15T01:51:17.262Z',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      __v: 0 }
+```
+
+ - With an invalid token, the server will return a 401 error
+ - With an invalid request, the server will return a 404 error
 
 Fetch _all_ events associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/allProfileEvents
 ```
+From this GET request, user will recieve the following response:
+```javascript
+    [ { created: '2018-03-15T17:32:26.635Z',
+        _id: '<._id>',
+        eventType: 'Interview',
+        eventTitle: 'Interview with Jewel',
+        eventDate: '2018-03-15T01:51:17.262Z',
+        userId: '<userId>',
+        profileId: '<profileId>',
+        companyId: '<companyId>',
+        __v: 0 } ]
+```
+
+ - With an invalid token, the server will return a 401 error
+ - With an invalid request, the server will return a 404 error
 
 Fetch _all_ events associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
 ```
 GET: /api/profile/:profileId/company/:companyId/allCompanyEvents
 ```
+From this GET request, user will recieve the following response: 
+```javascript
+    [ { created: '2018-03-15T17:32:26.847Z',
+        _id: '<._id>',
+        eventType: 'Interview',
+        eventTitle: 'Interview with Jewel',
+        eventDate: '2018-03-15T01:51:17.262Z',
+        userId: '<userId>',
+        profileId: '<profileId>',
+        companyId: '<companyId>',
+        __v: 0 },
+      { created: '2018-03-15T17:32:26.849Z',
+        _id: '<._id>',
+        eventType: 'Interview',
+        eventTitle: 'Test event title',
+        eventDate: '2018-03-15T01:51:17.262Z',
+        userId: '<userId>',
+        profileId: '<profileId>',
+        companyId: '<companyId>',
+        __v: 0 } ]
+```
+
+ - With an invalid token, the server will return a 401 error
+ - With an invalid request, the server will return a 404 error
+
 
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/event/:eventId
 ```
+From this PUT request, user will recieve the following response:
+```javascript
+    { created: '2018-03-15T17:32:26.954Z',
+      _id: '<._id>',
+      eventType: 'Interview',
+      eventTitle: 'drinks',
+      eventDate: '2018-03-15T01:51:17.262Z',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      __v: 0 }
+```
+
+  - With an invalid ID, the server will return a 404 error
+  - With an invalid token, the server will return a 401 error
+  - With an invalid body, the server will return a 400 error
 
 #### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/event/:eventId
 ```
+From this DELETE request, user will recieve the following response: 
+```javascript
+    {}
+```
 
+  - On successful deletion, the user will recieve a 204 status code
+  
 ### **_Contact_**
 #### POST
 ```
 POST /api/profile/:profileId/company/:companyId/contact
 ```
+From this POST request, user will recieve the following response:
+```javascript
+    { name: 'Willy Witting',
+      jobTitle: 'Central Mobility Producer',
+      email: 'Oleta_Berge74@yahoo.com',
+      phone: '515-164-8293',
+      linkedIn: 'https://krystal.name',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      created: '2018-03-15T17:11:19.793Z',
+      _id: '<._id>',
+      __v: 0 }
+```
+  - With an invald token, the server will return a 401 error
+  - Without sending a body, the server will return a 400 error
+  - With an invalid request, the server will return a 404 error
 
 #### GET
 ```
 GET /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
+From this GET request, user will recieve the following response: 
+```javascript
+    { created: '2018-03-15T17:11:19.986Z',
+      _id: '<._id>',
+      name: 'Willy Witting',
+      jobTitle: 'Central Mobility Producer',
+      email: 'Oleta_Berge74@yahoo.com',
+      phone: '515-164-8293',
+      linkedIn: 'https://krystal.name',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      __v: 0 }
+```
+
+  - With an invald token, the server will return a 401 error
+  - With an invalid request, the server will return a 404 error
 
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
+From this PUT request, user will recieve the following response: 
+```javascript
+    { created: '2018-03-15T17:11:20.098Z',
+      _id: '<._id>',
+      name: 'updated name',
+      jobTitle: 'Central Mobility Producer',
+      email: 'Oleta_Berge74@yahoo.com',
+      phone: '515-164-8293',
+      linkedIn: 'https://krystal.name',
+      userId: '<userId>',
+      profileId: '<profileId>',
+      companyId: '<companyId>',
+      __v: 0 }
+```
+  - With an invald token, the server will return a 401 error
+  - Without sending a body, the server will return a 400 error
+  - With an invalid request, the server will return a 404 error
 
 #### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
+From this delete request, user will recieve the following response: 
+```javascript
+    {}
+```
 
+  - On successful deletion, the user will recieve a 204 status code. 
+  
 ## Wireframes
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
