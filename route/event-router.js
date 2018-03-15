@@ -63,7 +63,7 @@ eventRouter.get('/api/profile/:profileId/company/:companyId/allCompanyEvents', b
     .then( events => {
       return res.json(events);
     })
-    .catch(err => next(createError(404, err.message)));
+    .catch(next);
 });
 
 eventRouter.put('/api/profile/:profileId/company/:companyId/event/:eventId', bearerAuth, jsonParser, function(req, res, next) {
