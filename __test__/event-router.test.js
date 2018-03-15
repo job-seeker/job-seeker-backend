@@ -105,11 +105,11 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should give an error with a wrong profileId but correct companyId', done => {
-      request.post(`${url}/api/profile/1234/company/${this.tempCompany._id}/event`)
+    it('should return a a 404 error with an invalid request', done => {
+      request.post(`${url}/api/profile/1234/company/${this.tempCompany._id}/eventz`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          expect(res.status).toEqual(400);
+          expect(res.status).toEqual(404);
           done();
         });
     });
@@ -193,7 +193,7 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/event/${this.tempEvent._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -280,7 +280,7 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -368,7 +368,7 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileEvents`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -474,7 +474,7 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/allCompanyEvents`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -567,7 +567,7 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       let updatedEvent = { eventTitle: 'drinks' };
       request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/event/${this.tempEvent._id}`)
         .send(updatedEvent)
