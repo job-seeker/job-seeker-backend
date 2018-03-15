@@ -461,7 +461,7 @@ From this POST request, user will recieve the following response:
   profileId: < profileId >,
   companyId: < companyId >,
   created: '2018-03-15T17:32:26.292Z',
-  _id: '< eventId >,
+  _id: < eventId >,
 }
 ```
 - With an invalid token, the server will return a 401 error
@@ -483,7 +483,7 @@ From this GET request, user will recieve the following response:
   profileId: < profileId >,
   companyId: < companyId >,
   created: '2018-03-15T17:32:26.292Z',
-  _id: '< eventId >,
+  _id: < eventId >,
 }
 ```
  - With an invalid token, the server will return a 401 error
@@ -504,7 +504,7 @@ From this GET request, user will recieve the following response:
   profileId: < profileId >,
   companyId: < companyId >,
   created: '2018-03-15T17:32:26.292Z',
-  _id: '< eventId >,
+  _id: < eventId >,
 }]
 ```
  - With an invalid token, the server will return a 401 error
@@ -524,7 +524,7 @@ From this GET request, user will recieve the following response:
   profileId: < profileId >,
   companyId: < companyId >,
   created: '2018-03-15T17:32:26.292Z',
-  _id: '< eventId >,
+  _id: < eventId >,
 },{
   eventType: 'Interview',
   eventTitle: 'Interview with Matt',
@@ -533,7 +533,7 @@ From this GET request, user will recieve the following response:
   profileId: < profileId >,
   companyId: < companyId >,
   created: '2018-03-15T17:32:26.292Z',
-  _id: '< eventId >,
+  _id: < eventId >,
 }]
 ```
  - With an invalid token, the server will return a 401 error
@@ -554,7 +554,7 @@ From this PUT request, user will recieve the following response:
   profileId: < profileId >,
   companyId: < companyId >,
   created: '2018-03-15T17:32:26.292Z',
-  _id: '< eventId >,
+  _id: < eventId >,
 }
 ```
   - With an invalid ID, the server will return a 404 error
