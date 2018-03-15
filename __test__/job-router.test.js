@@ -81,7 +81,6 @@ describe('Job Routes', function() {
         .send(exampleJob)
         .end((err, res) => {
           if (err) return done(err);
-          console.log('job', res.body);
           expect(res.status).toEqual(200);
           expect(res.body.title).toEqual(exampleJob.title);
           expect(res.body.link).toEqual(exampleJob.link);
@@ -195,6 +194,269 @@ describe('Job Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(404);
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/allProfileJobs', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleJob.userId = this.tempUser._id.toString();
+      exampleJob.profileId = this.tempProfile._id.toString();
+      exampleJob.companyId = this.tempCompany._id.toString();
+      new Job(exampleJob).save()
+        .then( job => {
+          this.tempJob = job;
+          this.tempCompany.jobPosting.push(this.tempJob._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated jobs when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileJobs`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body[0].title).toEqual(this.tempJob.title);
+          expect(res.body[0].status).toEqual(this.tempJob.status);
+          expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/12345/allProfileJobs`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('NotFoundError');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileJobs`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/allProfileJobs', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleJob.userId = this.tempUser._id.toString();
+      exampleJob.profileId = this.tempProfile._id.toString();
+      exampleJob.companyId = this.tempCompany._id.toString();
+      new Job(exampleJob).save()
+        .then( job => {
+          this.tempJob = job;
+          this.tempCompany.jobPosting.push(this.tempJob._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated jobs when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileJobs`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body[0].title).toEqual(this.tempJob.title);
+          expect(res.body[0].status).toEqual(this.tempJob.status);
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/12345/allProfileJobs`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('NotFoundError');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileJobs`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
+          done();
+        });
+    });
+  });
+  describe('GET: /api/profile/:profileId/company/:companyId/allCompanyJobs', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleJob.userId = this.tempUser._id.toString();
+      exampleJob.profileId = this.tempProfile._id.toString();
+      exampleJob.companyId = this.tempCompany._id.toString();
+      new Job(exampleJob).save()
+        .then( job => {
+          this.tempJob = job;
+          this.tempCompany.jobPosting.push(this.tempJob._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated jobs when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/allCompanyJobs`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body[0].title).toEqual(this.tempJob.title);
+          expect(res.body[0].status).toEqual(this.tempJob.status);
+          expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/12345/allCompanyJobs`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/allCompanyJobs`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -361,7 +623,6 @@ describe('Job Routes', function() {
       request.delete(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/job/${this.tempJob._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          console.log(res.body);
           expect(res.status).toEqual(204);
           expect(typeof res.body).toEqual('object');
           done();
