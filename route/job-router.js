@@ -56,6 +56,36 @@ jobRouter.get('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAut
     });
 });
 
+// GET all jobs associated with a profile
+jobRouter.get('/api/profile/:profileId/allProfileJobs', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/:profileId/allProfileJobs');
+
+  Job.find({ 'profileId':req.params.profileId })
+    .populate({
+      path: 'company',
+      populate: {
+        path: 'profile',
+        model: 'profile',
+      },
+    })
+    .then( jobs => {
+      return res.json(jobs);
+    })
+    .catch(err => next(createError(404, err.message)));
+});
+
+// GET all jobs associated with a company
+jobRouter.get('/api/profile/:profileId/company/:companyId/allCompanyJobs', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/:profileId/company/:companyId/allCompanyJobs');
+
+  Job.find({ 'companyId':req.params.companyId })
+    .populate('companies')
+    .then( jobs => {
+      return res.json(jobs);
+    })
+    .catch(err => next(createError(404, err.message)));
+});
+
 jobRouter.delete('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, jsonParser, function(req, res, next) {
   debug('DELETE: /api/profile/:profileId/company/:companyId/job/:jobId');
 
