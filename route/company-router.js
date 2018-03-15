@@ -2,7 +2,6 @@
 
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
-const createError = require('http-errors');
 const debug = require('debug')('job-seeker: company-router');
 
 const Profile = require('../model/profile.js');
@@ -13,8 +12,6 @@ const companyRouter = module.exports = Router();
 
 companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company');
-  if(!req.body.companyName) return next(createError(400, 'bad request'));
-
   Profile.findByIdAndAddCompany(req.params.profileId, req.body)
     .then( company => {
       if (req.params.profileId === company.profileId.toString()) res.json(company);
@@ -24,17 +21,13 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
 
 companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, jsonParser, function(req, res, next){
   debug('PUT: /api/profile/:profileId/company/:companyId');
-  if (!req.body.companyName) return next(createError(400, 'bad request'));
   Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true})
     .then( company => { 
       if(req.params.profileId === company.profileId.toString()){
         return res.json(company);
       }
     })
-    .catch(err => {
-      createError(404, err.message);
-      next();
-    });
+    .catch(next);
 });
 
 companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next) {
@@ -46,10 +39,7 @@ companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, func
         return res.json(company);
       }
     })
-    .catch( err => {
-      createError(404, err.message);
-      next();
-    });
+    .catch(next);
 });
 
 companyRouter.get('/api/profile/:profileId/company', bearerAuth, function(req, res, next) {
@@ -60,7 +50,7 @@ companyRouter.get('/api/profile/:profileId/company', bearerAuth, function(req, r
     .then( companies => {
       return res.json(companies);
     })
-    .catch(err => next(createError(404, err.message)));
+    .catch(next);
 });
 
 companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next){
