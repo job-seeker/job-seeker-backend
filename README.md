@@ -238,7 +238,7 @@ GET: /api/profile/:profileId/company/:companyId/allCompanyEvents
 From this GET request, user will recieve the following response: 
 ```javascript
     [ { created: '2018-03-15T17:32:26.847Z',
-        _id: '5aaaae2ae7120b5c4fad8f3d',
+        _id: '<._id>',
         eventType: 'Interview',
         eventTitle: 'Interview with Jewel',
         eventDate: '2018-03-15T01:51:17.262Z',
@@ -247,7 +247,7 @@ From this GET request, user will recieve the following response:
         companyId: '<companyId>',
         __v: 0 },
       { created: '2018-03-15T17:32:26.849Z',
-        _id: '5aaaae2ae7120b5c4fad8f3e',
+        _id: '<._id>',
         eventType: 'Interview',
         eventTitle: 'Test event title',
         eventDate: '2018-03-15T01:51:17.262Z',
@@ -264,7 +264,7 @@ PUT /api/profile/:profileId/company/:companyId/event/:eventId
 From this PUT request, user will recieve the following response:
 ```javascript
     { created: '2018-03-15T17:32:26.954Z',
-      _id: '5aaaae2ae7120b5c4fad8f42',
+      _id: '<._id>',
       eventType: 'Interview',
       eventTitle: 'drinks',
       eventDate: '2018-03-15T01:51:17.262Z',
@@ -298,7 +298,7 @@ From this POST request, user will recieve the following response:
       profileId: '<profileId>',
       companyId: '<companyId>',
       created: '2018-03-15T17:11:19.793Z',
-      _id: '5aaaa9376720a65bb2904e07',
+      _id: '<._id>',
       __v: 0 }
 ```
 #### GET
@@ -308,7 +308,7 @@ GET /api/profile/:profileId/company/:companyId/contact/:contactId
 From this GET request, user will recieve the following response: 
 ```javascript
     { created: '2018-03-15T17:11:19.986Z',
-      _id: '5aaaa9376720a65bb2904e0b',
+      _id: '<._id>',
       name: 'Willy Witting',
       jobTitle: 'Central Mobility Producer',
       email: 'Oleta_Berge74@yahoo.com',
@@ -326,7 +326,7 @@ PUT /api/profile/:profileId/company/:companyId/contact/:contactId
 From this PUT request, user will recieve the following response: 
 ```javascript
     { created: '2018-03-15T17:11:20.098Z',
-      _id: '5aaaa9386720a65bb2904e0f',
+      _id: '<._id>',
       name: 'updated name',
       jobTitle: 'Central Mobility Producer',
       email: 'Oleta_Berge74@yahoo.com',
