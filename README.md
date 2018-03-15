@@ -215,22 +215,65 @@ DELETE /api/profile/:profileId/company/:companyId/event/:eventId
 ```
 POST /api/profile/:profileId/company/:companyId/contact
 ```
-
+From this POST request, user will recieve the following response:
+```javascript
+    { name: 'Willy Witting',
+      jobTitle: 'Central Mobility Producer',
+      email: 'Oleta_Berge74@yahoo.com',
+      phone: '515-164-8293',
+      linkedIn: 'https://krystal.name',
+      userId: '5aaaa9376720a65bb2904e04',
+      profileId: '5aaaa9376720a65bb2904e05',
+      companyId: '5aaaa9376720a65bb2904e06',
+      created: '2018-03-15T17:11:19.793Z',
+      _id: '5aaaa9376720a65bb2904e07',
+      __v: 0 }
+```
 #### GET
 ```
 GET /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
-
+From this GET request, user will recieve the following response: 
+```javascript
+    { created: '2018-03-15T17:11:19.986Z',
+      _id: '5aaaa9376720a65bb2904e0b',
+      name: 'Willy Witting',
+      jobTitle: 'Central Mobility Producer',
+      email: 'Oleta_Berge74@yahoo.com',
+      phone: '515-164-8293',
+      linkedIn: 'https://krystal.name',
+      userId: '5aaaa9376720a65bb2904e08',
+      profileId: '5aaaa9376720a65bb2904e09',
+      companyId: '5aaaa9376720a65bb2904e0a',
+      __v: 0 }
+```
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/contact/:contactId
+```
+From this PUT request, user will recieve the following response: 
+```javascript
+    { created: '2018-03-15T17:11:20.098Z',
+      _id: '5aaaa9386720a65bb2904e0f',
+      name: 'updated name',
+      jobTitle: 'Central Mobility Producer',
+      email: 'Oleta_Berge74@yahoo.com',
+      phone: '515-164-8293',
+      linkedIn: 'https://krystal.name',
+      userId: '5aaaa9386720a65bb2904e0c',
+      profileId: '5aaaa9386720a65bb2904e0d',
+      companyId: '5aaaa9386720a65bb2904e0e',
+      __v: 0 }
 ```
 
 #### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
-
+From this delete request, user will recieve the following response: 
+```javascript
+    {}
+```
 ## Wireframes
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
