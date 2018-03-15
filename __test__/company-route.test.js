@@ -91,8 +91,9 @@ describe('Company Routes', function() {
     it('should return an error with a wrong profileId but correct companyId', done => {
       request.post(`${url}/api/profile/1234/company`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
+        .send(exampleCompany)
         .end((err, res) => {
-          expect(res.status).toEqual(400);
+          expect(res.status).toEqual(404);
           done();
         });
     });

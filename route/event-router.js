@@ -2,7 +2,6 @@
 
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
-const createError = require('http-errors');
 const debug = require('debug')('job-seeker:event-router');
 
 const Company = require('../model/company.js');
@@ -13,8 +12,6 @@ const eventRouter = module.exports = Router();
 
 eventRouter.post('/api/profile/:profileId/company/:companyId/event', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/event');
-  if(!req.body.eventTitle) return next(createError(400, 'bad request'));
-
   Company.findByIdAndAddEvent(req.params.companyId, req.body)
     .then( event => {
       if ((req.params.profileId === event.profileId.toString()) && (req.params.companyId === event.companyId.toString())) res.json(event);
@@ -29,11 +26,7 @@ eventRouter.get('/api/profile/:profileId/company/:companyId/event/:eventId', bea
     .then(event => {
       if ((req.params.profileId === event.profileId.toString()) && (req.params.companyId === event.companyId.toString())) res.json(event);
     })
-    .catch(err => {
-      createError(404, err.message);
-      next();
-    });
-
+    .catch(next);
 });
 
 // GET all events associated with a profile
@@ -51,7 +44,7 @@ eventRouter.get('/api/profile/:profileId/allProfileEvents', bearerAuth, function
     .then( events => {
       return res.json(events);
     })
-    .catch(err => next(createError(404, err.message)));
+    .catch(next);
 });
 
 // GET all events associated with a company
@@ -68,22 +61,16 @@ eventRouter.get('/api/profile/:profileId/company/:companyId/allCompanyEvents', b
 
 eventRouter.put('/api/profile/:profileId/company/:companyId/event/:eventId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId/company/:companyId/event/:eventId');
-  if (!req.body.eventTitle) return next(createError(400, 'bad request'));
-
   Event.findByIdAndUpdate(req.params.eventId, req.body, { new: true })
     .then(event => {
       if ((req.params.profileId === event.profileId.toString()) && (req.params.companyId === event.companyId.toString())) res.json(event);
     })
-    .catch(err => {
-      createError(404, err.message);
-      next();
-    });
+    .catch(next);
 
 });
 
 eventRouter.delete('/api/profile/:profileId/company/:companyId/event/:eventId', bearerAuth, function(req, res, next) {
   debug('DELETE: /api/profile/:profileId/company/:companyId/event/:eventId');
-
   Company.findByIdAndRemoveEvent(req.params.companyId, req.params.eventId)
     .then(company => {
       return company;
