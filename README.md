@@ -1,4 +1,4 @@
-# Job Seeker
+<h3 align="center"><img src="./images/logo.png" target="_blank"></h3>
 
 ## Status
 [![Build Status](https://travis-ci.org/job-seeker/job-seeker-backend.svg?branch=staging)](https://travis-ci.org/job-seeker/job-seeker-backend)
@@ -11,6 +11,7 @@
     * [bcrypt](https://www.npmjs.com/package/bcrypt)
     * [body-parser](https://www.npmjs.com/package/body-parser)
     * [cors](https://www.npmjs.com/package/cors)
+    * [coveralls](https://www.npmjs.com/package/coveralls)
     * [debug](https://www.npmjs.com/package/debug)
     * [dotenv](https://www.npmjs.com/package/dotenv)
     * [express](https://www.npmjs.com/package/express)
@@ -20,7 +21,6 @@
     * [mongoose](https://www.npmjs.com/package/mongoose)
     * [morgan](https://www.npmjs.com/package/morgan)
   * Developer dependencies:
-    * [coveralls](https://www.npmjs.com/package/coveralls)
     * [eslint](https://www.npmjs.com/package/eslint)
     * [faker](https://www.npmjs.com/package/faker)
     * [jest](https://www.npmjs.com/package/jest)
@@ -41,7 +41,7 @@ Create new user with a `username`, `email`, and `password`.
 POST /api/signup
 ```
 From this POST request, user will receive the following:
-```
+```javascript
 {
   res.text: < token >
 }
@@ -54,7 +54,7 @@ Log in as an existing user with a `username` and `password`.
 GET /api/signin
 ```
 From this GET request, user will receive the following:
-```
+```javascript
 {
   res.text: < token >
 }
@@ -69,8 +69,8 @@ Create a new profile with a valid token, existing `username` and `password`, as 
 POST /api/profile
 ```
 From this POST request, user will receive the following:
-```
-{ 
+```javascript
+{
   name: 'Peter Parker',
   email: 'peter.parker@definitelynotspiderman.com',
   companies: [],
@@ -106,7 +106,7 @@ Update an existing user's profile with a valid token and the user's `profileId`,
 PUT /api/profile/:profileId
 ```
 From this GET request, user will receive the following:
-```
+```javascript
 { 
   name: 'Peter Parker',
   email: 'peter.parker@avengers.com',
@@ -126,9 +126,16 @@ POST /api/profile/:profileId/company
 ```
 
 #### GET
+Fetch an existing company with a valid token, the user's `profileId`, and a specific `companyId`.
 ```
 GET /api/profile/:profileId/company/:companyId
 ```
+
+Fetch _all_ companies associated with a specific profile using a valid token and the user's `profileId`.
+```
+GET /api/profile/:profileId/company
+```
+
 
 #### PUT
 ```
@@ -151,6 +158,17 @@ POST /api/profile/:profileId/company/:companyId/job
 GET /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 
+Fetch _all_ jobs associated with a specific profile using a valid token and the user's `profileId`.
+```
+GET /api/profile/:profileId/allProfileJobs
+```
+
+Fetch _all_ jobs associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
+```
+GET: /api/profile/:profileId/company/:companyId/allCompanyJobs
+```
+
+
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/job/:jobId
@@ -170,6 +188,16 @@ POST /api/profile/:profileId/company/:companyId/event
 #### GET
 ```
 GET /api/profile/:profileId/company/:companyId/event/:eventId
+```
+
+Fetch _all_ events associated with a specific profile using a valid token and the user's `profileId`.
+```
+GET /api/profile/:profileId/allProfileEvents
+```
+
+Fetch _all_ events associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
+```
+GET: /api/profile/:profileId/company/:companyId/allCompanyEvents
 ```
 
 #### PUT
