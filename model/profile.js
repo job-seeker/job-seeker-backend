@@ -2,7 +2,6 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const createError = require('http-errors');
 const Company = require('./company.js');
 const debug = require('debug')('job-seeker:profile');
 
@@ -31,8 +30,7 @@ Profile.findByIdAndAddCompany = function(id, company) {
     })
     .then(() => {
       return this.tempCompany;
-    })
-    .catch(err => Promise.reject(createError(404, err.message)));
+    });
 };
 
 Profile.findByIdAndRemoveCompany = function(profileId, companyId) {

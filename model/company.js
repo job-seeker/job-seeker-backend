@@ -1,7 +1,6 @@
 'use strict';
 
 const debug = require('debug')('job-seeker:company');
-const createError = require('http-errors');
 const Job = require('./job.js');
 const Contact = require('./contact.js');
 const Event = require('./event.js');
@@ -46,8 +45,7 @@ Company.findByIdAndAddJob = function(id, job) {
     })
     .then( () => {
       return this.tempJob;
-    })
-    .catch( err => Promise.reject(createError(404, err.message)));
+    });
 };
 
 Company.findByIdAndRemoveJob = function(companyId, jobId){
@@ -82,8 +80,7 @@ Company.findByIdAndAddContact = function(id, contact) {
     })
     .then( () => {
       return this.tempContact;
-    })
-    .catch( err => Promise.reject(createError(404, err.message)));
+    });
 };
 
 Company.findByIdAndAddEvent = function(id, event) {
@@ -104,8 +101,7 @@ Company.findByIdAndAddEvent = function(id, event) {
     })
     .then( () => {
       return this.tempEvent;
-    })
-    .catch( err => Promise.reject(createError(404, err.message)));
+    });
 };
 
 Company.findByIdAndRemoveEvent = function (companyId, eventId) {
