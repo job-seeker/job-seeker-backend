@@ -11,7 +11,8 @@
   },
   "scripts": {
     "test": "DEBUG='job-seeker*' jest -i --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "start": "DEBUG='job-seeker*' node server.js"
+    "start": "DEBUG='job-seeker*' node server.js",
+    "test2": "jest -i profile-router.test.js"
   },
   "repository": {
     "type": "git",
