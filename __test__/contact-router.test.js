@@ -35,48 +35,48 @@ describe('Contact Routes', function() {
   });
 
   describe('POST: /api/profile/:profileId/company/:companyId/contact', () => {
-    describe('with a valid token and data', () => {
-      beforeAll( done => {
-        new User(exampleUser)
-          .generatePasswordHash(exampleUser.password)
-          .then( user => user.save())
-          .then( user => {
-            this.tempUser = user;
-            return user.generateToken();
-          })
-          .then( token => {
-            this.tempToken = token;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll( done => {
-        exampleProfile.userId = this.tempUser._id.toString();
-        new Profile(exampleProfile).save()
-          .then( profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
-      beforeAll( done => {
-        exampleCompany.userId = this.tempUser._id.toString();
-        exampleCompany.profileId = this.tempProfile._id.toString();
-        new Company(exampleCompany).save()
-          .then( company => {
-            this.tempCompany = company;
-            this.tempProfile.companies.push(this.tempCompany._id);
-            return this.tempProfile.save();
-          })
-          .then( profile => {
-            this.tempProfile = profile;
-            done();
-          })
-          .catch(done);
-      });
+    // describe('with a valid token and data', () => {
+    beforeAll( done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then( token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
     });
+    beforeAll( done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then( company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then( profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+  
 
-    it('should return a 200 and a newly instantiated contact', done => {
+    it('should return a 200 and a newly instantiated contact with a valid token and data', done => {
       request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact`)
         .send(exampleContact)
         .set({
@@ -92,44 +92,38 @@ describe('Contact Routes', function() {
           done();
         });
     });
-    describe('without a valid token', () => {
-      it('should return a 401 error', done => {
-        request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact`)
-          .send(exampleContact)
-          .end((err, res) => {
-            expect(res.status).toEqual(401);
-            done();
-          });
-      });
+    it('should return a 401 error without a valid token', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact`)
+        .send(exampleContact)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
     });
-    describe('without sending a body', () => {
-      it('should return a 400 error', done => {
-        request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact`)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(400);
-            done();
-          });
-      });
+    it('should return a 400 error without sending a body', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          done();
+        });
     });
-    describe('with an invalid request', () => {
-      it('should return a 404 error', done => {
-        request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contactz`)
-          .send(exampleContact)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(404);
-            done();
-          });
-      });
+    it('should return a 404 error with an invalid request', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contactz`)
+        .send(exampleContact)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          done();
+        });
     });
   });
 
-  describe('GET : /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
+  describe('GET: /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
     beforeAll( done => {
       new User(exampleUser)
         .generatePasswordHash(exampleUser.password)
@@ -188,47 +182,41 @@ describe('Contact Routes', function() {
       delete exampleProfile.userId;
       done();
     });
-    describe('with a valid request', () => {
-      it('should return a contact', done => {
-        request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(200);
-            expect(res.body.name).toEqual(exampleContact.name);
-            expect(res.body.jobTitle).toEqual(exampleContact.jobTitle);
-            expect(res.body.email).toEqual(exampleContact.email);
-            expect(res.body.phone).toEqual(exampleContact.phone);
-            expect(res.body.linkedIn).toEqual(exampleContact.linkedIn);
-            done();
-          });
-      });
+    it('should return a contact with a valid request', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body.name).toEqual(exampleContact.name);
+          expect(res.body.jobTitle).toEqual(exampleContact.jobTitle);
+          expect(res.body.email).toEqual(exampleContact.email);
+          expect(res.body.phone).toEqual(exampleContact.phone);
+          expect(res.body.linkedIn).toEqual(exampleContact.linkedIn);
+          done();
+        });
     });
-    describe('without a token', () => {
-      it('should return a 401 error', done => {
-        request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
-          .end((err, res) => {
-            expect(res.status).toEqual(401);
-            done();
-          });
-      });
+    it('should return a 401 error without a token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
     });
-    describe('with an invalid id', () => {
-      it('should return a 404 error', done => {
-        request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/1234`)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(404);
-            done();
-          });
-      });
+    it('should return a 404 error with an invalid id', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/1234`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          done();
+        });
     });
   });
 
-  describe('PUT : /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
+  describe('PUT: /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
     beforeAll( done => {
       new User(exampleUser)
         .generatePasswordHash(exampleUser.password)
@@ -287,65 +275,57 @@ describe('Contact Routes', function() {
       delete exampleProfile.userId;
       done();
     });
-    describe('with a valid request', () => {
-      it('should return an updated contact object', done => {
-        let updatedContact = { name: 'updated name' };
-        request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
-          .send(updatedContact)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(200);
-            expect(res.body.name).toEqual(updatedContact.name);
-            expect(res.body.jobTitle).toEqual(exampleContact.jobTitle);
-            expect(res.body.email).toEqual(exampleContact.email);
-            expect(res.body.phone).toEqual(exampleContact.phone);
-            expect(res.body.linkedIn).toEqual(exampleContact.linkedIn);
-            done();
-          });
-      });
+    it('should return an updated contact object with a valid request', done => {
+      let updatedContact = { name: 'updated name' };
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+        .send(updatedContact)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          expect(res.body.name).toEqual(updatedContact.name);
+          expect(res.body.jobTitle).toEqual(exampleContact.jobTitle);
+          expect(res.body.email).toEqual(exampleContact.email);
+          expect(res.body.phone).toEqual(exampleContact.phone);
+          expect(res.body.linkedIn).toEqual(exampleContact.linkedIn);
+          done();
+        });
     });
-    describe('without sending a valid id', () => {
-      it('should return a 404', done => {
-        let updatedContact = { name: 'updated name' };
-        request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/1234`)
-          .send(updatedContact)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(404);
-            done();
-          });
-      });
+    it('should return a 404 without sending a valid id', done => {
+      let updatedContact = { name: 'updated name' };
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/1234`)
+        .send(updatedContact)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          done();
+        });
     });
-    describe('without sending a token', () => {
-      it('should return a 401 error', done => {
-        let updatedContact = { name: 'updated name' };
-        request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
-          .send(updatedContact)
-          .end((err, res) => {
-            expect(res.status).toEqual(401);
-            done();
-          });
-      });
+    it('should return a 401 error without sending a token', done => {
+      let updatedContact = { name: 'updated name' };
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+        .send(updatedContact)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          done();
+        });
     });
-    describe('without sending a body', () => {
-      it('should return a 400 error', done => {
-        request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(400);
-            done();
-          });
-      });
+    it('should return a 400 error without sending a body', done => {
+      request.put(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          done();
+        });
     });
   });
 
-  describe('DELETE : /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
+  describe('DELETE: /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
     beforeAll( done => {
       new User(exampleUser)
         .generatePasswordHash(exampleUser.password)
@@ -400,19 +380,16 @@ describe('Contact Routes', function() {
         })
         .catch(done);
     });
-
-    describe('with a valid delete request', () => {
-      it('should delete a company and return a 204', done => {
-        request.delete(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
-          .set({
-            Authorization: `Bearer ${this.tempToken}`,
-          })
-          .end((err, res) => {
-            expect(res.status).toEqual(204);
-            expect(typeof res.body).toEqual('object');
-            done();
-          });
-      });
+    it('should delete a company and return a 204 with a valid delete request', done => {
+      request.delete(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/contact/${this.tempContact._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`,
+        })
+        .end((err, res) => {
+          expect(res.status).toEqual(204);
+          expect(typeof res.body).toEqual('object');
+          done();
+        });
     });
   });
 });

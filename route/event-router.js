@@ -5,7 +5,6 @@ const jsonParser = require('body-parser').json();
 const createError = require('http-errors');
 const debug = require('debug')('job-seeker:event-router');
 
-
 const Company = require('../model/company.js');
 const Event = require('../model/event.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
@@ -15,10 +14,9 @@ const eventRouter = module.exports = Router();
 eventRouter.post('/api/profile/:profileId/company/:companyId/event', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/event');
   if(!req.body.eventTitle) return next(createError(400, 'bad request'));
-  console.log(req.body)
+
   Company.findByIdAndAddEvent(req.params.companyId, req.body)
     .then( event => {
-      console.log(event)
       if ((req.params.profileId === event.profileId.toString()) && (req.params.companyId === event.companyId.toString())) res.json(event);
     })
     .catch(next);
@@ -36,6 +34,36 @@ eventRouter.get('/api/profile/:profileId/company/:companyId/event/:eventId', bea
       next();
     });
 
+});
+
+// GET all events associated with a profile
+eventRouter.get('/api/profile/:profileId/allProfileEvents', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/:profileId/allProfileEvents');
+
+  Event.find({ 'profileId':req.params.profileId })
+    .populate({
+      path: 'company',
+      populate: {
+        path: 'profile',
+        model: 'profile',
+      },
+    })
+    .then( events => {
+      return res.json(events);
+    })
+    .catch(err => next(createError(404, err.message)));
+});
+
+// GET all events associated with a company
+eventRouter.get('/api/profile/:profileId/company/:companyId/allCompanyEvents', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/:profileId/company/:companyId/allCompanyEvents');
+
+  Event.find({ 'companyId':req.params.companyId })
+    .populate('companies')
+    .then( events => {
+      return res.json(events);
+    })
+    .catch(err => next(createError(404, err.message)));
 });
 
 eventRouter.put('/api/profile/:profileId/company/:companyId/event/:eventId', bearerAuth, jsonParser, function(req, res, next) {
