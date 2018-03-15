@@ -96,6 +96,7 @@ describe('Job Routes', function() {
         .send(exampleJob)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -104,6 +105,7 @@ describe('Job Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(400);
+          expect(typeof res.text).toEqual('string');
           done();
         });
     });
@@ -186,6 +188,7 @@ describe('Job Routes', function() {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/job/${this.tempJob._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -194,6 +197,7 @@ describe('Job Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
           done();
         });
     });
@@ -542,6 +546,7 @@ describe('Job Routes', function() {
         .send(updatedJob)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -552,6 +557,7 @@ describe('Job Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
           done();
         });
     });
@@ -560,6 +566,7 @@ describe('Job Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(400);
+          expect(res.text).toEqual('BadRequestError');
           done();
         });
     });
