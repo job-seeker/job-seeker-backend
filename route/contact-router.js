@@ -37,6 +37,24 @@ contactRouter.get('/api/profile/:profileId/company/:companyId/contact/:contactId
 
 });
 
+// GET all contacts associated with a profile
+contactRouter.get('/api/profile/:profileId/allProfileContacts', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/:profileId/allProfileContacts');
+
+  Contact.find({ 'profileId':req.params.profileId })
+    .populate({
+      path: 'company',
+      populate: {
+        path: 'profile',
+        model: 'profile',
+      },
+    })
+    .then( contact => {
+      return res.json(contact);
+    })
+    .catch(err => next(createError(404, err.message)));
+});
+
 contactRouter.put('/api/profile/:profileId/company/:companyId/contact/:contactId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId/company/:companyId/contact/:contactId');
   if (!req.body.name) return next(createError(400, 'bad request'));
