@@ -242,7 +242,6 @@ describe('Profile routes', function() {
         })
         .then(token => {
           this.tempToken = token;
-          console.log(token);
           done();
         })
         .catch(done);
