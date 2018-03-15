@@ -1,7 +1,5 @@
 <h3 align="center"><img src="./images/logo.png" target="_blank"></h3>
 
-<h1 align="center">Job Seeker</h1>
-
 ## Status
 [![Build Status](https://travis-ci.org/job-seeker/job-seeker-backend.svg?branch=staging)](https://travis-ci.org/job-seeker/job-seeker-backend)
 [![Coverage Status](https://coveralls.io/repos/github/job-seeker/job-seeker-backend/badge.svg)](https://coveralls.io/github/job-seeker/job-seeker-backend)
