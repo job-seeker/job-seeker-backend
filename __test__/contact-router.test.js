@@ -279,7 +279,6 @@ describe('Contact Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(200);
-          console.log(res.body[0]);
           expect(res.body[0].name).toEqual(this.tempContact.name);
           expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
           done();
