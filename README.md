@@ -1,4 +1,6 @@
-# Job Seeker
+<h3 align="center"><img src="./images/logo.png" target="_blank"></h3>
+
+<h1 align="center">Job Seeker</h1>
 
 ## Status
 [![Build Status](https://travis-ci.org/job-seeker/job-seeker-backend.svg?branch=staging)](https://travis-ci.org/job-seeker/job-seeker-backend)
