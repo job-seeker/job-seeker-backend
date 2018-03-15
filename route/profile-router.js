@@ -30,8 +30,7 @@ profileRouter.get('/api/profile/:profileId', bearerAuth, function(req, res, next
 
 profileRouter.delete('/api/profile/:profileId', bearerAuth, function(req, res, next) {
   debug('DELETE: /api/profile');
-
-  Profile.findByIdAndRemove(req.params.profileId, bearerAuth)
+  Profile.findByIdAndRemove(req.params.profileId)
     .then( () => res.send(204))
     .catch(next);
 });
@@ -43,5 +42,5 @@ profileRouter.put('/api/profile/:profileId', bearerAuth, jsonParser, function(re
 
   Profile.findByIdAndUpdate(req.params.profileId, req.body, { new: true })
     .then( profile => res.json(profile))
-    .catch(err => next(err));
+    .catch(next);
 });

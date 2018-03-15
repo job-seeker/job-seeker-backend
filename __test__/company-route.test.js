@@ -77,6 +77,7 @@ describe('Company Routes', function() {
         .send(exampleCompany)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -85,14 +86,16 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(400);
+          expect(res.text).toEqual('BadRequestError');
           done();
         });
     });
-    it('should return an error with a wrong profileId but correct companyId', done => {
-      request.post(`${url}/api/profile/1234/company`)
+    it('should return a 404 error with an invalid request', done => {
+      request.post(`${url}/api/profile/${this.tempProfile._id}/companyz`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          expect(res.status).toEqual(400);
+          expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
           done();
         });
     });
@@ -158,6 +161,7 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
           done();
         });
     });
@@ -165,6 +169,7 @@ describe('Company Routes', function() {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -323,6 +328,7 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(404);
+          expect(typeof res.text).toEqual('string');
           done();
         });
     });
@@ -332,6 +338,7 @@ describe('Company Routes', function() {
         .send(updatedCompany)
         .end((err, res) => {
           expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
           done();
         });
     });
@@ -340,6 +347,7 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
           expect(res.status).toEqual(400);
+          expect(res.text).toEqual('BadRequestError');
           done();
         });
     });

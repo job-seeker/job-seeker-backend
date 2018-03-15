@@ -105,7 +105,7 @@ Update an existing user's profile with a valid token and the user's `profileId`,
 ```
 PUT /api/profile/:profileId
 ```
-From this GET request, user will receive the following:
+From this PUT request, user will receive the following:
 ```javascript
 { 
   name: 'Peter Parker',
@@ -121,63 +121,282 @@ From this GET request, user will receive the following:
   
 ### **_Company_**
 #### POST
+Create a new company with a valid token, `profileId`, `companyName`, and `website`. `streetAddress`, `city`, `state`, `zip`, `phone`, and `companyNotes` are optional.
 ```
 POST /api/profile/:profileId/company
 ```
+From this POST request, user will receive the following:
+```javascript
+{
+  companyName: 'Stark Industries',
+  website: 'http://www.starkindustries.com',
+  profileId: < profileId > ,
+  userId: < userId >,
+  contacts: [],
+  jobPosting: [],
+  events: [],
+  created: '2018-03-15T17:11:41.552Z',
+  _id: < companyId >,
+}
+```
+- With no request body, the server will return a 400 error
+- With an invalid request, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
-#### GET
+#### GET (single company)
 Fetch an existing company with a valid token, the user's `profileId`, and a specific `companyId`.
 ```
 GET /api/profile/:profileId/company/:companyId
 ```
+From this GET request, user will receive the following:
+```javascript
+{ 
+  companyName: 'Stark Industries',
+  website: 'http://www.starkindustries.com',
+  profileId: < profileId > ,
+  userId: < userId >,
+  contacts: [],
+  jobPosting: [],
+  events: [],
+  created: '2018-03-15T17:11:41.552Z',
+  _id: < companyId >,
+}
+```
+- With an invalid company ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
+#### GET (all companies)
 Fetch _all_ companies associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/company
 ```
-
+From this GET request, user will receive the following:
+```javascript
+{ 
+  name: 'Scott Lang',
+  email: 'scottlang@hotmail.com',
+  companies: 
+    [{ 
+      companyName: 'Alias Investigations',
+      website: 'http://www.aliasinvestigations.net',
+      profileId: < profileId > ,
+      userId: < userId >,
+      contacts: [],
+      jobPosting: [],
+      events: [],
+      created: '2018-03-15T17:34:57.866Z',
+      _id: < companyId >,
+    },
+    {
+      companyName: 'Hogarth, Chao, and Benowitz',
+      website: 'https://www.hcb.com',
+      profileId: < profileId > ,
+      userId: < userId >,
+      contacts: [],
+      jobPosting: [],
+      events: [],
+      created: '2018-03-15T17:34:57.872Z',
+      _id: < companyId >,
+    }],
+  userId: < userId>,
+  _id: < profileId >,
+}
+```
+- With an invalid profile ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
 #### PUT
+Update an existing company's information with a valid token and the user's `profileId`, as well as the `companyId` and relevant company information.
 ```
 PUT /api/profile/:profileId/company/:companyId
 ```
+From this PUT request, user will receive the following:
+```javascript
+{ 
+  companyName: 'Stark Industries',
+  website: 'https://www.starkindustries.com/careers/',
+  profileId: < profileId > ,
+  userId: < userId >,
+  contacts: [],
+  jobPosting: [],
+  events: [],
+  created: '2018-03-15T17:11:41.552Z',
+  _id: < companyId >,
+}
+```
+- With an invalid profile ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
+- Without a valid request body provided, the server will return a 400 error
 
 #### DELETE
+Remove an existing company from the database with a valid token, the user's `profileId`, and the `companyId`.
+
 ```
 DELETE /api/profile/:profileId/company/:companyId
 ```
+User will not receive any data, but should expect a 204 status.
 
 ### Job
 #### POST
+Create a new job with a valid token, `profileId`, `companyId`, `title`, `link`, `status`, and `type`. `notes` and `tags` are optional.
 ```
 POST /api/profile/:profileId/company/:companyId/job
 ```
+From this POST request, user will receive the following:
+```javascript
+{ 
+  title: 'Web Developer',
+  link: 'http://www.nelsonandmurdoch.org',
+  status: 'Submitted Application',
+  type: 'Front-End',
+  tags: [],
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:59:17.369Z',
+  _id: < jobId >,
+}
+```
+- With no request body, the server will return a 400 error
+- Without a valid token provided, the server will return a 401 error
 
-#### GET
+#### GET (single job)
+Fetch an existing job with a valid token, the user's `profileId`, a specific `companyId`, and a specific `jobId`.
+
 ```
 GET /api/profile/:profileId/company/:companyId/job/:jobId
 ```
+From this GET request, user will receive the following:
+```javascript
+{ 
+  title: 'Web Developer',
+  link: 'http://www.nelsonandmurdoch.org',
+  status: 'Submitted Application',
+  type: 'Front-End',
+  tags: [],
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:59:17.369Z',
+  _id: < jobId >,
+}
+```
+- With an invalid company ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
+#### GET (all jobs from profile)
 Fetch _all_ jobs associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/allProfileJobs
 ```
+From this GET request, user will receive the following:
+```javascript
+[{ 
+    title: 'Web Developer',
+    link: 'http://www.nelsonandmurdoch.org',
+    status: 'Submitted Application',
+    type: 'Front-End',
+    tags: [],
+    userId: < userId >,
+    profileId: < profileId >,
+    companyId: < companyId >,
+    created: '2018-03-15T17:59:17.369Z',
+    _id: < jobId >,
+  },
+  { 
+    title: 'Back-End Developer',
+    link: 'http://www.nelsonandmurdoch.org/careers/job1',
+    status: 'Submitted Application',
+    type: 'Back-End',
+    tags: [],
+    userId: < userId >,
+    profileId: < profileId >,
+    companyId: < companyId >,
+    created: '2018-03-15T17:59:17.369Z',
+    _id: < jobId >,
+  },
+  { 
+    title: 'Software Engineer - React',
+    link: 'http://www.nelsonandmurdoch.org/careers/job2',
+    status: 'Submitted Application',
+    type: 'Front-End',
+    tags: [],
+    userId: < userId >,
+    profileId: < profileId >,
+    companyId: < companyId >,
+    created: '2018-03-15T17:59:17.369Z',
+    _id: < jobId >,
+  }]
+```
+- With an invalid company ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
+#### GET (all jobs from single company)
 Fetch _all_ jobs associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
 ```
 GET: /api/profile/:profileId/company/:companyId/allCompanyJobs
 ```
-
+From this GET request, user will receive the following:
+```javascript
+[{ 
+    title: 'Back-End Developer',
+    link: 'http://www.nelsonandmurdoch.org/careers/job1',
+    status: 'Submitted Application',
+    type: 'Back-End',
+    tags: [],
+    userId: < userId >,
+    profileId: < profileId >,
+    companyId: < companyId >,
+    created: '2018-03-15T17:59:17.369Z',
+    _id: < jobId >,
+  },
+  { 
+    title: 'Software Engineer - React',
+    link: 'http://www.nelsonandmurdoch.org/careers/job2',
+    status: 'Submitted Application',
+    type: 'Front-End',
+    tags: [],
+    userId: < userId >,
+    profileId: < profileId >,
+    companyId: < companyId >,
+    created: '2018-03-15T17:59:17.369Z',
+    _id: < jobId >,
+  }]
+```
+- With an invalid company ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
 
 #### PUT
+Update an existing job's information with a valid token,the user's `profileId`, the `companyId`, the `jobId`, and relevant company information.
 ```
 PUT /api/profile/:profileId/company/:companyId/job/:jobId
 ```
+From this PUT request, user will receive the following:
+```javascript
+{ 
+  title: 'Web Developer - React',
+  link: 'http://www.nelsonandmurdoch.org',
+  status: 'Evaluating Offer',
+  type: 'Front-End',
+  tags: [],
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:59:17.369Z',
+  _id: < jobId >,
+}
+```
+- With an invalid company ID, the server will return a 404 error
+- Without a valid token provided, the server will return a 401 error
+- With no request body, the server will return a 400 error
 
 #### DELETE
+Remove an existing company from the database with a valid token, the user's `profileId`, the `companyId`, and the `jobId`.
 ```
 DELETE /api/profile/:profileId/company/:companyId/job/:jobId
 ```
+User will not receive any data, but should expect a 204 status.
+
 
 ### **_Event_**
 #### POST
