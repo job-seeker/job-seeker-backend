@@ -35,7 +35,6 @@ describe('Contact Routes', function() {
   });
 
   describe('POST: /api/profile/:profileId/company/:companyId/contact', () => {
-    // describe('with a valid token and data', () => {
     beforeAll( done => {
       new User(exampleUser)
         .generatePasswordHash(exampleUser.password)

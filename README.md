@@ -322,6 +322,10 @@ From this POST request, user will recieve the following response:
       _id: '<._id>',
       __v: 0 }
 ```
+  - With an invald token, the server will return a 401 error
+  - Without sending a body, the server will return a 400 error
+  - With an invalid request, the server will return a 404 error
+
 #### GET
 ```
 GET /api/profile/:profileId/company/:companyId/contact/:contactId
@@ -340,6 +344,10 @@ From this GET request, user will recieve the following response:
       companyId: '<companyId>',
       __v: 0 }
 ```
+
+  - With an invald token, the server will return a 401 error
+  - With an invalid request, the server will return a 404 error
+
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/contact/:contactId
@@ -358,6 +366,9 @@ From this PUT request, user will recieve the following response:
       companyId: '<companyId>',
       __v: 0 }
 ```
+  - With an invald token, the server will return a 401 error
+  - Without sending a body, the server will return a 400 error
+  - With an invalid request, the server will return a 404 error
 
 #### DELETE
 ```
@@ -367,6 +378,9 @@ From this delete request, user will recieve the following response:
 ```javascript
     {}
 ```
+
+  - On successful deletion, the user will recieve a 204 status code. 
+  
 ## Wireframes
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
