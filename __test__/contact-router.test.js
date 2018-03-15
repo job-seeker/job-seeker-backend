@@ -215,6 +215,95 @@ describe('Contact Routes', function() {
     });
   });
 
+  describe('GET: /api/profile/:profileId/allProfileContacts', function () {
+    beforeAll(done => {
+      new User(exampleUser)
+        .generatePasswordHash(exampleUser.password)
+        .then(user => user.save())
+        .then(user => {
+          this.tempUser = user;
+          return user.generateToken();
+        })
+        .then(token => {
+          this.tempToken = token;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleProfile.userId = this.tempUser._id.toString();
+      new Profile(exampleProfile).save()
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll(done => {
+      exampleCompany.userId = this.tempUser._id.toString();
+      exampleCompany.profileId = this.tempProfile._id.toString();
+      new Company(exampleCompany).save()
+        .then(company => {
+          this.tempCompany = company;
+          this.tempProfile.companies.push(this.tempCompany._id);
+          return this.tempProfile.save();
+        })
+        .then(profile => {
+          this.tempProfile = profile;
+          done();
+        })
+        .catch(done);
+    });
+    beforeAll( done => {
+      exampleContact.userId = this.tempUser._id.toString();
+      exampleContact.profileId = this.tempProfile._id.toString();
+      exampleContact.companyId = this.tempCompany._id.toString();
+      new Contact(exampleContact).save()
+        .then( contact => {
+          this.tempContact = contact;
+          this.tempCompany.contacts.push(this.tempContact._id);
+          return this.tempCompany.save();
+        })
+        .then( company => {
+          this.tempCompany = company;
+          done();
+        })
+        .catch(done);
+    });
+    afterAll(done => {
+      delete exampleProfile.userId;
+      done();
+    });
+    it('should return all of a profile\'s associated conttacts when provided valid token and body', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileContacts`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(200);
+          console.log(res.body[0]);
+          expect(res.body[0].name).toEqual(this.tempContact.name);
+          expect(res.body[0].profileId).toEqual(this.tempProfile._id.toString());
+          done();
+        });
+    });
+    it('should return a 404 error when submitted with invalid id', done => {
+      request.get(`${url}/api/profile/12345/allProfileContacts`)
+        .set({ Authorization: `Bearer ${this.tempToken}` })
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('NotFoundError');
+          done();
+        });
+    });
+    it('should give 401 error when sent without token', done => {
+      request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileContacts`)
+        .end((err, res) => {
+          expect(res.status).toEqual(401);
+          expect(res.text).toEqual('UnauthorizedError');
+          done();
+        });
+    });
+  });
+  
   describe('PUT: /api/profile/:profileId/company/:companyId/contact/:contactId', () => {
     beforeAll( done => {
       new User(exampleUser)
