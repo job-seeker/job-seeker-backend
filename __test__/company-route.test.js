@@ -395,7 +395,6 @@ describe('Company Routes', function() {
       request.delete(`${url}/api/profile/${this.tempCompany.profileId}/company/${this.tempCompany._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          console.log(res.body)
           expect(res.status).toEqual(204);
           expect(typeof res.body).toEqual('object');
           done();
