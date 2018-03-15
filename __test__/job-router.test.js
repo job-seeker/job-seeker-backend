@@ -281,7 +281,7 @@ describe('Job Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileJobs`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -368,7 +368,7 @@ describe('Job Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/allProfileJobs`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
@@ -456,7 +456,7 @@ describe('Job Routes', function() {
           done();
         });
     });
-    it('should give 401 error when sent without token', done => {
+    it('should return a 401 error when sent without token', done => {
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}/allCompanyJobs`)
         .end((err, res) => {
           expect(res.status).toEqual(401);
