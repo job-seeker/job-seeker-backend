@@ -5,6 +5,51 @@
 [![Coverage Status](https://coveralls.io/repos/github/job-seeker/job-seeker-backend/badge.svg?branch=staging)](https://coveralls.io/github/job-seeker/job-seeker-backend?branch=staging)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Table of Contents
+<!-- TOC -->
+
+- [Status](#status)
+- [Table of Contents](#table-of-contents)
+- [Technology Used](#technology-used)
+- [Schema](#schema)
+- [Routes](#routes)
+  - [**_User_**](#_user_)
+    - [POST](#post)
+    - [GET](#get)
+  - [**_Profile_**](#_profile_)
+    - [GET](#get-1)
+    - [PUT](#put)
+  - [**_Company_**](#_company_)
+    - [POST](#post-1)
+    - [GET (single company)](#get-single-company)
+    - [GET (all companies from profile)](#get-all-companies-from-profile)
+    - [PUT](#put-1)
+    - [DELETE](#delete)
+  - [**_Job_**](#_job_)
+    - [POST](#post-2)
+    - [GET (single job)](#get-single-job)
+    - [GET (all jobs from profile)](#get-all-jobs-from-profile)
+    - [GET (all jobs from single company)](#get-all-jobs-from-single-company)
+    - [PUT](#put-2)
+    - [DELETE](#delete-1)
+  - [**_Event_**](#_event_)
+    - [POST](#post-3)
+    - [GET (single event)](#get-single-event)
+    - [GET (all events from profile)](#get-all-events-from-profile)
+    - [GET (all events from single company)](#get-all-events-from-single-company)
+    - [PUT](#put-3)
+    - [DELETE](#delete-2)
+  - [**_Contact_**](#_contact_)
+    - [POST](#post-4)
+    - [GET (single contact)](#get-single-contact)
+    - [GET (all contacts from single company)](#get-all-contacts-from-single-company)
+    - [PUT](#put-4)
+    - [DELETE](#delete-3)
+- [Wireframes](#wireframes)
+- [Contributors](#contributors)
+
+<!-- /TOC -->
+
 ## Technology Used
 * **[Node.js](https://nodejs.org)**
   * Application dependencies:
@@ -61,7 +106,7 @@ From this GET request, user will receive the following:
 ```
 - With an invalid request body, the server will return a 401 error
 - With an invalid username and/or password, the server will return a 500 error
-
+<br><br>
 ### **_Profile_**
 **POST**  
 Create a new profile with a valid token, existing `username` and `password`, as well as the new user's `name` and `email`.
@@ -118,7 +163,8 @@ From this PUT request, user will receive the following:
 - With an invalid profile ID, the server will return a 404 error
 - Without a valid token provided, the server will return a 401 error
 - Without a request body, the server will return a 400 error
-  
+<br><br>
+
 ### **_Company_**
 #### POST
 Create a new company with a valid token, `profileId`, `companyName`, and `website`. `streetAddress`, `city`, `state`, `zip`, `phone`, and `companyNotes` are optional.
@@ -165,7 +211,7 @@ From this GET request, user will receive the following:
 - With an invalid company ID, the server will return a 404 error
 - Without a valid token provided, the server will return a 401 error
 
-#### GET (all companies)
+#### GET (all companies from profile)
 Fetch _all_ companies associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/company
@@ -235,8 +281,9 @@ Remove an existing company from the database with a valid token, the user's `pro
 DELETE /api/profile/:profileId/company/:companyId
 ```
 User will not receive any data, but should expect a 204 status.
+<br><br>
 
-### Job
+### **_Job_**
 #### POST
 Create a new job with a valid token, `profileId`, `companyId`, `title`, `link`, `status`, and `type`. `notes` and `tags` are optional.
 ```
@@ -396,210 +443,233 @@ Remove an existing company from the database with a valid token, the user's `pro
 DELETE /api/profile/:profileId/company/:companyId/job/:jobId
 ```
 User will not receive any data, but should expect a 204 status.
-
+<br><br>
 
 ### **_Event_**
 #### POST
+Create a new event with a valid token, `profileId`, `companyId`, `eventType`, `eventTitle`, and `eventDate`. The `eventNotes` field is optional.
 ```
 POST /api/profile/:profileId/company/:companyId/event
 ```
 From this POST request, user will recieve the following response:
 ```javascript
-    { eventType: 'Interview',
-      eventTitle: 'Interview with Jewel',
-      eventDate: '2018-03-15T01:51:17.262Z',
-      userId: '<userId>',
-      profileId: '<profileId>',
-      companyId: '<companyId>',
-      created: '2018-03-15T17:32:26.292Z',
-      _id: '<._id>',
-      __v: 0 }
+{ 
+  eventType: 'Interview',
+  eventTitle: 'Interview with Pepper',
+  eventDate: '2018-03-22T01:51:17.262Z',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:32:26.292Z',
+  _id: '< eventId >,
+}
 ```
- - With an invalid token, the server will return a 401 error
- - With an invalid body, the server will return a 400 error
- - With an invalid request, the server will return a 404 error
+- With an invalid token, the server will return a 401 error
+- With an invalid body, the server will return a 400 error
+- With an invalid request, the server will return a 404 error
 
-
-#### GET
+#### GET (single event)
+Fetch an existing job with a valid token, the user's `profileId`, a specific `companyId`, and a specific `eventId`.
 ```
 GET /api/profile/:profileId/company/:companyId/event/:eventId
 ```
 From this GET request, user will recieve the following response: 
 ```javascript
-    { created: '2018-03-15T17:32:26.502Z',
-      _id: '5aaaae2ae7120b5c4fad8f31',
-      eventType: 'Interview',
-      eventTitle: 'Interview with Jewel',
-      eventDate: '2018-03-15T01:51:17.262Z',
-      userId: '<userId>',
-      profileId: '<profileId>',
-      companyId: '<companyId>',
-      __v: 0 }
+{ 
+  eventType: 'Interview',
+  eventTitle: 'Interview with Jeri',
+  eventDate: '2018-03-20T01:51:17.262Z',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:32:26.292Z',
+  _id: '< eventId >,
+}
 ```
-
  - With an invalid token, the server will return a 401 error
  - With an invalid request, the server will return a 404 error
 
+#### GET (all events from profile)
 Fetch _all_ events associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/allProfileEvents
 ```
 From this GET request, user will recieve the following response:
 ```javascript
-    [ { created: '2018-03-15T17:32:26.635Z',
-        _id: '<._id>',
-        eventType: 'Interview',
-        eventTitle: 'Interview with Jewel',
-        eventDate: '2018-03-15T01:51:17.262Z',
-        userId: '<userId>',
-        profileId: '<profileId>',
-        companyId: '<companyId>',
-        __v: 0 } ]
+[{ 
+  eventType: 'Interview',
+  eventTitle: 'Interview with Karen',
+  eventDate: '2018-04-22T01:51:17.262Z',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:32:26.292Z',
+  _id: '< eventId >,
+}]
 ```
-
  - With an invalid token, the server will return a 401 error
  - With an invalid request, the server will return a 404 error
-
+#### GET (all events from single company)
 Fetch _all_ events associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
 ```
 GET: /api/profile/:profileId/company/:companyId/allCompanyEvents
 ```
 From this GET request, user will recieve the following response: 
 ```javascript
-    [ { created: '2018-03-15T17:32:26.847Z',
-        _id: '<._id>',
-        eventType: 'Interview',
-        eventTitle: 'Interview with Jewel',
-        eventDate: '2018-03-15T01:51:17.262Z',
-        userId: '<userId>',
-        profileId: '<profileId>',
-        companyId: '<companyId>',
-        __v: 0 },
-      { created: '2018-03-15T17:32:26.849Z',
-        _id: '<._id>',
-        eventType: 'Interview',
-        eventTitle: 'Test event title',
-        eventDate: '2018-03-15T01:51:17.262Z',
-        userId: '<userId>',
-        profileId: '<profileId>',
-        companyId: '<companyId>',
-        __v: 0 } ]
+[{ 
+  eventType: 'Interview',
+  eventTitle: 'Interview with Foggy',
+  eventDate: '2018-04-22T01:51:17.262Z',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:32:26.292Z',
+  _id: '< eventId >,
+},{
+  eventType: 'Interview',
+  eventTitle: 'Interview with Matt',
+  eventDate: '2018-04-05T01:51:17.262Z',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:32:26.292Z',
+  _id: '< eventId >,
+}]
 ```
-
  - With an invalid token, the server will return a 401 error
  - With an invalid request, the server will return a 404 error
 
-
 #### PUT
+Update an existing event's information with a valid token,the user's `profileId`, the `companyId`, the `eventId`, and relevant event information.
 ```
 PUT /api/profile/:profileId/company/:companyId/event/:eventId
 ```
 From this PUT request, user will recieve the following response:
 ```javascript
-    { created: '2018-03-15T17:32:26.954Z',
-      _id: '<._id>',
-      eventType: 'Interview',
-      eventTitle: 'drinks',
-      eventDate: '2018-03-15T01:51:17.262Z',
-      userId: '<userId>',
-      profileId: '<profileId>',
-      companyId: '<companyId>',
-      __v: 0 }
+{
+  eventType: 'Phone Interview',
+  eventTitle: 'Phone call with Matt',
+  eventDate: '2018-04-05T01:51:17.262Z',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:32:26.292Z',
+  _id: '< eventId >,
+}
 ```
-
   - With an invalid ID, the server will return a 404 error
   - With an invalid token, the server will return a 401 error
   - With an invalid body, the server will return a 400 error
 
 #### DELETE
+Remove an existing event from the database with a valid token, the user's `profileId`, the `companyId`, and the `eventId`.
 ```
 DELETE /api/profile/:profileId/company/:companyId/event/:eventId
 ```
-From this DELETE request, user will recieve the following response: 
-```javascript
-    {}
-```
+User will not receive any data, but should expect a 204 status.
+<br><br>
 
-  - On successful deletion, the user will recieve a 204 status code
-  
 ### **_Contact_**
 #### POST
+Create a new contact with a valid token, `profileId`, `companyId`, `name` and `jobTitle`. `email`, `phone`, `linkedIn`, and `notes` fields are optional.
 ```
 POST /api/profile/:profileId/company/:companyId/contact
 ```
 From this POST request, user will recieve the following response:
 ```javascript
-    { name: 'Willy Witting',
-      jobTitle: 'Central Mobility Producer',
-      email: 'Oleta_Berge74@yahoo.com',
-      phone: '515-164-8293',
-      linkedIn: 'https://krystal.name',
-      userId: '<userId>',
-      profileId: '<profileId>',
-      companyId: '<companyId>',
-      created: '2018-03-15T17:11:19.793Z',
-      _id: '<._id>',
-      __v: 0 }
+{ 
+  name: 'Jessica Jones',
+  jobTitle: 'PI',
+  email: 'jj@aliasinvestigations.net',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:11:19.793Z',
+  _id: < contactId >,
+}
 ```
   - With an invald token, the server will return a 401 error
   - Without sending a body, the server will return a 400 error
   - With an invalid request, the server will return a 404 error
 
-#### GET
+#### GET (single contact)
+Fetch an existing contact with a valid token, the user's `profileId`, a specific `companyId`, and a specific `contactId`.
 ```
 GET /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 From this GET request, user will recieve the following response: 
 ```javascript
-    { created: '2018-03-15T17:11:19.986Z',
-      _id: '<._id>',
-      name: 'Willy Witting',
-      jobTitle: 'Central Mobility Producer',
-      email: 'Oleta_Berge74@yahoo.com',
-      phone: '515-164-8293',
-      linkedIn: 'https://krystal.name',
-      userId: '<userId>',
-      profileId: '<profileId>',
-      companyId: '<companyId>',
-      __v: 0 }
+{ 
+  name: 'Shuri',
+  jobTitle: 'Leader, Wakandan Design Group',
+  email: 'shuri@wdg.com',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:11:19.793Z',
+  _id: < contactId >,
+}
 ```
+  - With an invald token, the server will return a 401 error
+  - With an invalid request, the server will return a 404 error
 
+#### GET (all contacts from single company)
+Fetch _all_ contacts associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
+```javascript
+[{ 
+  name: 'Trish Walker',
+  jobTitle: 'Host, Trish Talk',
+  email: 'trish@wnex.com',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:11:19.793Z',
+  _id: < contactId >,
+},
+{ 
+  name: 'Ricky Langtry',
+  jobTitle: 'Host, The Ricky Langtry Show',
+  email: 'ricky@wnex.com',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:11:19.793Z',
+  _id: < contactId >,
+}]
+```
   - With an invald token, the server will return a 401 error
   - With an invalid request, the server will return a 404 error
 
 #### PUT
+Update an existing contact's information with a valid token,the user's `profileId`, the `companyId`, the `contactId`, and relevant contact information.
 ```
 PUT /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
 From this PUT request, user will recieve the following response: 
 ```javascript
-    { created: '2018-03-15T17:11:20.098Z',
-      _id: '<._id>',
-      name: 'updated name',
-      jobTitle: 'Central Mobility Producer',
-      email: 'Oleta_Berge74@yahoo.com',
-      phone: '515-164-8293',
-      linkedIn: 'https://krystal.name',
-      userId: '<userId>',
-      profileId: '<profileId>',
-      companyId: '<companyId>',
-      __v: 0 }
+{ 
+  name: 'Shuri',
+  jobTitle: 'Leader, Wakandan Design Group',
+  email: 'shuri@wdg.com',
+  linkedIn: 'http://www.linkedin.com/user/1234',
+  userId: < userId >,
+  profileId: < profileId >,
+  companyId: < companyId >,
+  created: '2018-03-15T17:11:19.793Z',
+  _id: < contactId >,
+}
 ```
   - With an invald token, the server will return a 401 error
   - Without sending a body, the server will return a 400 error
   - With an invalid request, the server will return a 404 error
 
 #### DELETE
+Remove an existing contact from the database with a valid token, the user's `profileId`, the `companyId`, and the `contactId`.
 ```
 DELETE /api/profile/:profileId/company/:companyId/contact/:contactId
 ```
-From this delete request, user will recieve the following response: 
-```javascript
-    {}
-```
+User will not receive any data, but should expect a 204 status.
 
-  - On successful deletion, the user will recieve a 204 status code. 
-  
 ## Wireframes
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Sign%20Up.png" target="_blank" height="300px"></kbd>
 <kbd><img src="./images/wireframes/Home%20Page%20-%20Log%20In.png" target="_blank" height="300px"></kbd>
