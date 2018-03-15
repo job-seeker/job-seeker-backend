@@ -196,6 +196,10 @@ From this POST request, user will recieve the following response:
       _id: '<._id>',
       __v: 0 }
 ```
+ - With an invalid token, the server will return a 401 error
+ - With an invalid body, the server will return a 400 error
+ - With an invalid request, the server will return a 404 error
+
 
 #### GET
 ```
@@ -214,6 +218,9 @@ From this GET request, user will recieve the following response:
       __v: 0 }
 ```
 
+ - With an invalid token, the server will return a 401 error
+ - With an invalid request, the server will return a 404 error
+
 Fetch _all_ events associated with a specific profile using a valid token and the user's `profileId`.
 ```
 GET /api/profile/:profileId/allProfileEvents
@@ -221,7 +228,7 @@ GET /api/profile/:profileId/allProfileEvents
 From this GET request, user will recieve the following response:
 ```javascript
     [ { created: '2018-03-15T17:32:26.635Z',
-        _id: '5aaaae2ae7120b5c4fad8f35',
+        _id: '<._id>',
         eventType: 'Interview',
         eventTitle: 'Interview with Jewel',
         eventDate: '2018-03-15T01:51:17.262Z',
@@ -230,6 +237,9 @@ From this GET request, user will recieve the following response:
         companyId: '<companyId>',
         __v: 0 } ]
 ```
+
+ - With an invalid token, the server will return a 401 error
+ - With an invalid request, the server will return a 404 error
 
 Fetch _all_ events associated with a specific profile _and company_ using a valid token, the user's `profileId`, and the `companyId`.
 ```
@@ -257,6 +267,10 @@ From this GET request, user will recieve the following response:
         __v: 0 } ]
 ```
 
+ - With an invalid token, the server will return a 401 error
+ - With an invalid request, the server will return a 404 error
+
+
 #### PUT
 ```
 PUT /api/profile/:profileId/company/:companyId/event/:eventId
@@ -274,6 +288,10 @@ From this PUT request, user will recieve the following response:
       __v: 0 }
 ```
 
+  - With an invalid ID, the server will return a 404 error
+  - With an invalid token, the server will return a 401 error
+  - With an invalid body, the server will return a 400 error
+
 #### DELETE
 ```
 DELETE /api/profile/:profileId/company/:companyId/event/:eventId
@@ -282,6 +300,9 @@ From this DELETE request, user will recieve the following response:
 ```javascript
     {}
 ```
+
+  - On successful deletion, the user will recieve a 204 status code
+  
 ### **_Contact_**
 #### POST
 ```
