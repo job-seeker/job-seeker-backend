@@ -76,11 +76,12 @@ describe('User Auth Routes', function() {
           done();
         });
     });
-    it('should return a 400 error with an invalid username and password', done => {
+    it('should return a 500 error with an invalid username and password', done => {
       request.get(`${url}/api/signin`)
         .auth('fakeusername', 'fakepassword')
         .end( (err, res) => {
-          expect(res.status).toEqual(400);
+          expect(res.status).toEqual(500);
+          expect(res.text).toEqual('InternalServerError');
           done();
         });
     });
