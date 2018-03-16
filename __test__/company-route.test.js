@@ -93,7 +93,6 @@ describe('Company Routes', function() {
     it('should return a 404 error with an invalid request', done => {
       request.post(`${url}/api/profile/${this.tempProfile._id}/companyz`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
-        .send(exampleCompany)
         .end((err, res) => {
           expect(res.status).toEqual(404);
           expect(typeof res.text).toEqual('string');

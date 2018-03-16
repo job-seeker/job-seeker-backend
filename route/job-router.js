@@ -2,8 +2,10 @@
 
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
+const createError = require('http-errors');
 const debug = require('debug')('job-seeker:job-router');
 
+// const Profile = require('../model/profile.js');
 const Company = require('../model/company.js');
 const Job = require('../model/job.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
@@ -12,6 +14,7 @@ const jobRouter = module.exports = Router();
 
 jobRouter.post('/api/profile/:profileId/company/:companyId/job', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/job');
+  if(!req.body.title) return next(createError(400, 'bad request'));
   
   Company.findByIdAndAddJob(req.params.companyId, req.body)
     .then( job => {
@@ -24,6 +27,7 @@ jobRouter.post('/api/profile/:profileId/company/:companyId/job', bearerAuth, jso
 
 jobRouter.put('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId/company/:companyId/job/:jobId');
+  if(!req.body.title) return next(createError(400, 'bad request'));
 
   Job.findByIdAndUpdate(req.params.jobId, req.body, {new:true})
     .then( job =>{
@@ -31,7 +35,10 @@ jobRouter.put('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAut
         return res.json(job);
       }
     })
-    .catch(next);
+    .catch(err => {
+      createError(404, err.message);
+      next();
+    });
 });
 
 jobRouter.get('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, function(req, res, next) {
@@ -43,7 +50,10 @@ jobRouter.get('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAut
         return res.json(job);
       }
     })
-    .catch(next);
+    .catch(err => {
+      createError(404, err.message);
+      next();
+    });
 });
 
 // GET all jobs associated with a profile
@@ -61,7 +71,7 @@ jobRouter.get('/api/profile/:profileId/allProfileJobs', bearerAuth, function(req
     .then( jobs => {
       return res.json(jobs);
     })
-    .catch(next);
+    .catch(err => next(createError(404, err.message)));
 });
 
 // GET all jobs associated with a company
@@ -73,7 +83,7 @@ jobRouter.get('/api/profile/:profileId/company/:companyId/allCompanyJobs', beare
     .then( jobs => {
       return res.json(jobs);
     })
-    .catch(next);
+    .catch(err => next(createError(404, err.message)));
 });
 
 jobRouter.delete('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, jsonParser, function(req, res, next) {
