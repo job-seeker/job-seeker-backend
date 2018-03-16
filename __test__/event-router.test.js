@@ -105,11 +105,11 @@ describe('Event Routes', function () {
           done();
         });
     });
-    it('should return a a 404 error with an invalid request', done => {
-      request.post(`${url}/api/profile/1234/company/${this.tempCompany._id}/eventz`)
+    it('should give an error with a wrong profileId but correct companyId', done => {
+      request.post(`${url}/api/profile/1234/company/${this.tempCompany._id}/event`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
-          expect(res.status).toEqual(404);
+          expect(res.status).toEqual(400);
           done();
         });
     });

@@ -90,12 +90,12 @@ describe('Company Routes', function() {
           done();
         });
     });
-    it('should return a 404 error with an invalid request', done => {
-      request.post(`${url}/api/profile/${this.tempProfile._id}/companyz`)
+    it('should return an error with a wrong profileId but correct companyId', done => {
+      request.post(`${url}/api/profile/1234/company`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
+        .send(exampleCompany)
         .end((err, res) => {
           expect(res.status).toEqual(404);
-          expect(typeof res.text).toEqual('string');
           done();
         });
     });
