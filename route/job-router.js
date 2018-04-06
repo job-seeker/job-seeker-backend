@@ -10,11 +10,13 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const jobRouter = module.exports = Router();
 
+// REVIEW: More FULL CRUD!  Sweeeeeet!
 jobRouter.post('/api/profile/:profileId/company/:companyId/job', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/job');
   
   Company.findByIdAndAddJob(req.params.companyId, req.body)
     .then( job => {
+      // REVIEW: nice one liner but it's a bit long, for cleanliness, might be better to break it up on new lines
       if((req.params.profileId === job.profileId.toString()) && (req.params.companyId === job.companyId.toString())){
         return res.json(job);
       }
@@ -50,6 +52,7 @@ jobRouter.get('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAut
 jobRouter.get('/api/profile/:profileId/allProfileJobs', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId/allProfileJobs');
 
+  // REVIEW: as noted above, great use of populate
   Job.find({ 'profileId':req.params.profileId })
     .populate({
       path: 'company',
@@ -68,6 +71,7 @@ jobRouter.get('/api/profile/:profileId/allProfileJobs', bearerAuth, function(req
 jobRouter.get('/api/profile/:profileId/company/:companyId/allCompanyJobs', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId/company/:companyId/allCompanyJobs');
 
+  // REVIEW: good use of "find" and populate
   Job.find({ 'companyId':req.params.companyId })
     .populate('companies')
     .then( jobs => {

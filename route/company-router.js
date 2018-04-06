@@ -15,6 +15,7 @@ companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, fu
   debug('POST: /api/profile/:profileId/company');
   if(!req.body.companyName) return next(createError(400, 'bad request'));
 
+  // REVIEW: excellent usage of a custom resource method to populate a company
   Profile.findByIdAndAddCompany(req.params.profileId, req.body)
     .then( company => {
       if (req.params.profileId === company.profileId.toString()) res.json(company);
@@ -32,6 +33,9 @@ companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, json
       }
     })
     .catch(err => {
+      // REVIEW: why are you calling next() without an argument here?
+      // directly passing the error through to your error handling middleware is a better practice
+      // note: same comment goes for all instances of this within this file
       createError(404, err.message);
       next();
     });
@@ -67,6 +71,9 @@ companyRouter.delete('/api/profile/:profileId/company/:companyId', bearerAuth, f
   debug('DELETE: /api/profile/:profileId/company/:companyId');
 
   Profile.findByIdAndRemoveCompany(req.params.profileId, req.params.companyId)
+    // REVIEW: nice job using chained then blocks to pass values down until the final action is completed
+    // that said, there isn't a need for the return res.sendStatus to be by itself - you could just send the status before
+    // returning Company.findByIdAndRemove...
     .then( profile => {
       return profile;
     })

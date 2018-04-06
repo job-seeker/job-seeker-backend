@@ -10,6 +10,7 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const eventRouter = module.exports = Router();
 
+// REVIEW: FULL CRUD AGAIN - YES!
 eventRouter.post('/api/profile/:profileId/company/:companyId/event', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/event');
 

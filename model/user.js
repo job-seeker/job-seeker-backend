@@ -9,6 +9,9 @@ const debug = require('debug')('job-seeker:user');
 
 const Schema = mongoose.Schema;
 
+// REVIEW: looks exactly as expected - to gain a deeper understanding of user models, try
+// creating on that is different than that of what we've done in lecture - primarily by using different
+// token conventions and different properties/names on the model
 const userSchema = Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -16,6 +19,7 @@ const userSchema = Schema({
   findHash : { type: String, unique: true },
 });
 
+// REVIEW: great debug statements - very descriptive
 userSchema.methods.generatePasswordHash = function(password) {
   debug('Password Hashing');
 

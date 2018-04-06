@@ -14,7 +14,15 @@ const url = `http://localhost:${PORT}`;
 
 require('jest');
 
+// REVIEW: overall your test files are heavy and MOST of the tests are meaningful - the notes below account for the same
+// testing structures used in every test file
+
+// REVIEW: while your tests look good, and there is lots of them - yaaaaaay, there are several database hooks that you are
+// implementing over and over again - as discussed in class, the creation of a "cleanDB" module/methods may really help clean
+// this file up and greatly reduce it's size
 describe('Company Routes', function() {
+
+  // REVIEW: server/database hooks look good
   beforeAll( done => {
     serverToggle.serverOn(server, done);
   });
@@ -31,7 +39,7 @@ describe('Company Routes', function() {
       .catch(done);
   });
   describe('POST: /api/profile/:profileId/company', function() {
-    
+    // REVIEW: temp user creation looks good
     beforeAll( done => {
       new User(exampleUser)
         .generatePasswordHash(exampleUser.password)
@@ -64,6 +72,8 @@ describe('Company Routes', function() {
         .set({ Authorization: `Bearer ${this.tempToken}`})
         .send(exampleCompany)
         .end((err, res) => {
+          // REVIEW: actual tests look good - could be a bit more robust, but generally, you are
+          // accounting for the properties on the response/status, which is the main point
           expect(res.status).toEqual(200);
           expect(res.body.companyName).toEqual(exampleCompany.companyName);
           expect(res.body.website).toEqual(exampleCompany.website);
@@ -144,6 +154,7 @@ describe('Company Routes', function() {
       done();
     });
     it('should return a company when provided valid token and body', done => {
+      // REVIEW: great error testing!!!
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/${this.tempCompany._id}`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
@@ -214,6 +225,7 @@ describe('Company Routes', function() {
         .catch(done);
     });
     beforeAll( done => {
+      // REVIEW: remove the following comment from production branches
       // instantiating second example company in order to test population of multiple companies
       exampleCompany2.userId = this.tempUser._id.toString();
       exampleCompany2.profileId = this.tempProfile._id.toString();
@@ -234,6 +246,8 @@ describe('Company Routes', function() {
       done();
     });
     it('should return a company when provided valid token and body', done => {
+      // REVIEW: great usage of temporary object creation, along with scope management
+      // additionally - good checking of more than one company on the response
       request.get(`${url}/api/profile/${this.tempProfile._id}/company/`)
         .set({ Authorization: `Bearer ${this.tempToken}` })
         .end((err, res) => {
