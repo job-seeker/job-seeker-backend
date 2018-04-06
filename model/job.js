@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// REVIEW: model properties look good - no need for the validate comment though
 const jobSchema = Schema({
   title: { type: String, required: true },
   link: { type: String, required: true, unique: true },

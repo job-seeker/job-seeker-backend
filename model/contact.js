@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// REVIEW: model properties look good
 const contactSchema = Schema({
   name: { type: String, required: true },
   jobTitle: { type: String },

@@ -9,6 +9,7 @@ const createError = require('http-errors');
 
 const userRouter = module.exports = Router();
 
+// REVIEW: user and auth related functionality look great - no concerns here
 userRouter.post('/api/signup', jsonParser, function(req, res, next) {
   debug('POST: /api/signup');
   if(!req.body.username) return next(createError(400, 'ValidationError'));

@@ -8,6 +8,8 @@ const Event = require('./event.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// REVIEW: model properties look good - depending on your team's coding style you can get rid of the {}
+// when creating a data type constraint - for example "thing: { type: String }" and "thing: String" are the same
 const companySchema = Schema({
   companyName: { type: String, required: true },
   website: { type: String, required: true },
@@ -27,6 +29,7 @@ const companySchema = Schema({
 
 const Company = module.exports = mongoose.model('company', companySchema);
 
+// REVIEW: great custom model methods!
 Company.findByIdAndAddJob = function(id, job) {
   debug('findByIdAndAddJob');
   
@@ -51,6 +54,8 @@ Company.findByIdAndAddJob = function(id, job) {
 Company.findByIdAndRemoveJob = function(companyId, jobId){
   debug('findByIdAndRemoveJob');
 
+  // REVIEW: interesting but good implementation of this - be careful with loops and mongo save() queries though
+  // things can get strange and buggy quickly when doing that
   return Company.findById(companyId)
     .then(company => {
       for(let i = 0; i < company.jobPosting.length; i++){
@@ -65,6 +70,7 @@ Company.findByIdAndRemoveJob = function(companyId, jobId){
 Company.findByIdAndAddContact = function(id, contact) {
   debug('findByIdAndAddContact');
   
+  // REVIEW: great passing of data into subsequent then blocks - this is clean and easy to read
   return Company.findById(id)
     .then( company => {
       contact.userId = company.userId;
@@ -86,6 +92,7 @@ Company.findByIdAndAddContact = function(id, contact) {
 Company.findByIdAndAddEvent = function(id, event) {
   debug('findByIdAndAddEvent');
   
+  // REVIEW: same as above - great passing of data into subsequent then blocks - this is clean and easy to read
   return Company.findById(id)
     .then( company => {
       event.userId = company.userId;
@@ -107,6 +114,7 @@ Company.findByIdAndAddEvent = function(id, event) {
 Company.findByIdAndRemoveEvent = function (companyId, eventId) {
   debug('findByIdAndRemoveEvent');
 
+  // REVIEW: same as above - be carefule looping and saving like this
   return Company.findById(companyId)
     .then(company => {
       for (let i = 0; i < company.events.length; i++) {
@@ -121,6 +129,7 @@ Company.findByIdAndRemoveEvent = function (companyId, eventId) {
 Company.findByIdAndRemoveContact = function(companyId, contactId) {
   debug('findByIdAndRemoveContact');
 
+  // REVIEW: reference the above
   return Company.findById(companyId)
     .then(company => {
       for (let i = 0; i < company.contacts.length; i ++) {

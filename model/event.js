@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// REVIEW: model properties look good
 const eventSchema = Schema({
   eventType: { type: String, required: true },
   eventTitle: { type: String, required: true },

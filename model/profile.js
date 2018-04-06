@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const Company = require('./company.js');
 const debug = require('debug')('job-seeker:profile');
 
+// REVIEW: model properties look good - nice job adding a "ref" to the company model
 const profileSchema = Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -14,6 +15,7 @@ const profileSchema = Schema({
 
 const Profile = module.exports = mongoose.model('profile', profileSchema);
 
+// REVIEW: nice passing of data through then() blocks
 Profile.findByIdAndAddCompany = function(id, company) {
   debug('findByIdAndAddCompany');
   return Profile.findById(id)
