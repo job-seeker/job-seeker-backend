@@ -683,8 +683,9 @@ User will not receive any data, but should expect a 204 status.
 ## Contributors
 [Ahmed Ali](https://github.com/AhmedAli93)  
 
-[Alex Bowers](https://github.com/warlordlizard)  
+[Alex Bowers](https://github.com/warlordlizard)  __
 
 [Melanie Cohen](https://github.com/melaniebcohen)  
 
 [Christian Miller](https://github.com/ruskeezy)
+
