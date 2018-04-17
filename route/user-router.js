@@ -4,6 +4,7 @@ const jsonParser = require('body-parser').json();
 const debug = require('debug')('job-seeker: user-router');
 const Router = require('express').Router;
 const User = require('../model/user.js');
+const Profile = require('../model/profile.js');
 const basicAuth = require('../lib/basic-auth-middleware.js');
 const createError = require('http-errors');
 
@@ -34,11 +35,45 @@ userRouter.get('/api/signin', basicAuth, function (req, res, next) {
 });
 
 userRouter.post('/api/handleAuth', jsonParser, function (req, res, next) {
-  debug('GET: /api/handleAuth');
+  debug('POST: /api/handleAuth');
+
+  let savedUser = null;
+  const userData = {};
 
   User.findOne({ email: req.body.email })
-    .then(user => user ? user : new User(req.body).save())
+    .then(user => {
+      if (user) {
+        savedUser = user;
+        return Profile.findOne({ userId: user._id })
+          .populate('companies')
+          .then(profile => {
+            userData.profile = profile;
+
+            return savedUser;
+          });
+      }
+      else {
+        return new User(req.body).save()
+          .then(user => {
+            savedUser = user;
+
+            return new Profile({
+              email: user.email,
+              userId: user._id,
+            }).save();
+          })
+          .then(profile => {
+            userData.profile = profile;
+
+            return savedUser;
+          });
+      }
+    })
     .then(user => user.generateToken())
-    .then(token => res.send(token))
+    .then(token => {
+      userData.token = token;
+
+      res.json(userData);
+    })
     .catch(next);
 });
