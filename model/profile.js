@@ -6,7 +6,7 @@ const Company = require('./company.js');
 const debug = require('debug')('job-seeker:profile');
 
 const profileSchema = Schema({
-  name: { type: String, required: true },
+  name: { type: String},
   email: { type: String, required: true },
   companies: [{ type: Schema.Types.ObjectId, ref: 'company' }],
   userId: { type: Schema.Types.ObjectId, required: true },
