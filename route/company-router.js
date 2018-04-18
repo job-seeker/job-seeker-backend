@@ -11,6 +11,17 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const companyRouter = module.exports = Router();
 
+companyRouter.post('/api/profile/:profileId/createCompany', jsonParser, function(req, res, next) {
+  debug('POST: /api/profile/:profileId/createCompany');  
+  if(!req.body.companyName) return next(createError(400, 'bad request'));
+
+  Profile.findByIdAndAddCompany(req.params.profileId, req.body)
+    .then( company => {
+      if (req.params.profileId === company.profileId.toString()) res.json(company);
+    })
+    .catch(next);
+});
+
 companyRouter.post('/api/profile/:profileId/company', bearerAuth, jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company');
   if(!req.body.companyName) return next(createError(400, 'bad request'));
