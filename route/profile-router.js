@@ -20,6 +20,16 @@ profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, ne
     .catch(next);
 });
 
+profileRouter.get('/api/profile/', bearerAuth, function(req, res, next) {
+  debug('GET: /api/profile/');
+
+  Profile.findOne({ userId: req.user._id })
+    .populate('companies')
+    .then( profile => res.json(profile))
+    .catch(next);
+});
+
+
 profileRouter.get('/api/profile/:profileId', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId');
 
