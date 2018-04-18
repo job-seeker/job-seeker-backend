@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 
 const jobSchema = Schema({
   title: { type: String, required: true },
-  link: { type: String, required: true, unique: true },
+  link: { type: String, required: true }, // no longer unique...
   status: { type: String, required: true }, // validate on front end
-  type: { type: String, required: true },
+  type: { type: String }, // no longer required
   notes: { type: String },
   tags: { type: Array, default: [] },
   userId: { type: Schema.Types.ObjectId, required: true },
