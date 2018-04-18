@@ -22,6 +22,18 @@ jobRouter.post('/api/profile/:profileId/company/:companyId/job', bearerAuth, jso
     .catch(next); 
 });
 
+jobRouter.post('/api/profile/:profileId/company/:companyId/jobCreate', jsonParser, function(req, res, next) {
+  debug('POST: /api/profile/:profileId/company/:companyId/job');
+  
+  Company.findByIdAndAddJob(req.params.companyId, req.body)
+    .then( job => {
+      if((req.params.profileId === job.profileId.toString()) && (req.params.companyId === job.companyId.toString())){
+        return res.json(job);
+      }
+    })
+    .catch(next); 
+});
+
 jobRouter.put('/api/profile/:profileId/company/:companyId/job/:jobId', bearerAuth, jsonParser, function(req, res, next) {
   debug('PUT: /api/profile/:profileId/company/:companyId/job/:jobId');
 
