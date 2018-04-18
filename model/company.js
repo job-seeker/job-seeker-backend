@@ -11,9 +11,9 @@ const Schema = mongoose.Schema;
 const companySchema = Schema({
   companyName: { type: String, required: true },
   website: { type: String, required: true },
+  cityState: { type: String },
+  // state: { type: String },
   streetAddress: { type: String },
-  city: { type: String },
-  state: { type: String },
   zip: { type: String },
   phone: { type: String },
   companyNotes: { type: String },
