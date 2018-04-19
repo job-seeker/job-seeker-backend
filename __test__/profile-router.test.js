@@ -136,11 +136,12 @@ describe('Profile routes', function() {
         });
     });
     it('should return a 404 error if an invalid id was provided', done => {
-      request.get(`${url}/api/profile`)
+      request.get(`${url}/api/profile/1234`)
         .set({
           Authorization: `Bearer ${this.tempToken}`,
         })
         .end((err, res) => {
+          console.log(res.body);
           expect(res.status).toEqual(404);
           expect(typeof res.text).toEqual('string');
           done();
