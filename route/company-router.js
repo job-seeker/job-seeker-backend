@@ -48,8 +48,8 @@ companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, json
     });
 });
 
-companyRouter.get('/api/profile/:profileId/company/:companyId', function(req, res, next) {
-// companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next) {
+// companyRouter.get('/api/profile/:profileId/company/:companyId', function(req, res, next) {
+companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/:profileId/company/:companyId');
   
   Company.findById(req.params.companyId)
