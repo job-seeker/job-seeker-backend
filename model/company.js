@@ -29,10 +29,7 @@ const Company = module.exports = mongoose.model('company', companySchema);
 
 Company.findByIdAndAddJob = function(id, job) {
   debug('findByIdAndAddJob');
-  
-  // console.log(id)
-  // console.log(job)
-  
+    
   return Company.findById(id)
     .then( company => {
       job.userId = company.userId;

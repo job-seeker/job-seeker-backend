@@ -25,9 +25,6 @@ jobRouter.post('/api/profile/:profileId/company/:companyId/job', bearerAuth, jso
 jobRouter.post('/api/profile/:profileId/company/:companyId/jobCreate', jsonParser, function(req, res, next) {
   debug('POST: /api/profile/:profileId/company/:companyId/job');
 
-  // console.log(req.params)
-  // console.log(req.body)
-  
   Company.findByIdAndAddJob(req.params.companyId, req.body)
     .then( job => {
       if((req.params.profileId === job.profileId.toString()) && (req.params.companyId === job.companyId.toString())){
