@@ -22,7 +22,8 @@ profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, ne
 
 profileRouter.get('/api/profile/', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/');
-
+  // console.log('dshfkjsadhf',req.user);
+  // console.log()
   Profile.findOne({ userId: req.user._id })
     .populate({
       path: 'companies',
