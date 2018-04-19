@@ -24,7 +24,14 @@ profileRouter.get('/api/profile/', bearerAuth, function(req, res, next) {
   debug('GET: /api/profile/');
 
   Profile.findOne({ userId: req.user._id })
-    .populate('companies')
+    .populate({
+      path: 'companies',
+      populate: [
+        { path: 'jobPosting' },
+        { path: 'events' },
+        { path: 'contacts' },
+      ],
+    })
     .then( profile => res.json(profile))
     .catch(next);
 });
