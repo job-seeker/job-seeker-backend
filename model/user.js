@@ -10,8 +10,8 @@ const debug = require('debug')('job-seeker:user');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
-  // username: { type: String, unique: true },
-  email: { type: String, required: true, unique: true },
+  username: { type: String, unique: true },
+  email: { type: String, required: true },
   password: { type: String},
   findHash: { type: String, unique: true },
 });
