@@ -11,7 +11,7 @@ const Schema = mongoose.Schema;
 
 const userSchema = Schema({
   username: { type: String, unique: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
   password: { type: String},
   findHash: { type: String, unique: true },
 });
