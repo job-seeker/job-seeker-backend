@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/job-seeker/job-seeker-backend#readme",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "coveralls": "^3.0.0",
