@@ -1,4 +1,6 @@
-<h3 align="center"><img src="./images/logo.png" target="_blank"></h3>
+<h3 align="center"><img src="https://github.com/job-seeker/job-seeker-frontend/blob/staging/src/assets/logo.png?raw=true" height="125">
+
+<h1 align="center"><a href="http://www.job-seeker.net">Job Seeker</a></h1>
 
 ## Status
 [![Build Status](https://travis-ci.org/job-seeker/job-seeker-backend.svg?branch=staging)](https://travis-ci.org/job-seeker/job-seeker-backend)
