@@ -45,7 +45,14 @@ userRouter.post('/api/handleAuth', jsonParser, function (req, res, next) {
       if (user) {
         savedUser = user;
         return Profile.findOne({ userId: user._id })
-          .populate('companies')
+          .populate({
+            path: 'companies',
+            populate: [
+              { path: 'jobPosting' },
+              { path: 'events' },
+              { path: 'contacts' },
+            ],
+          })
           .then(profile => {
             userData.profile = profile;
 
