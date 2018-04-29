@@ -68,7 +68,14 @@ companyRouter.get('/api/profile/:profileId/company', bearerAuth, function(req, r
   debug('GET: /api/profile/:profileId/company');
 
   Profile.findById(req.params.profileId)
-    .populate('companies')
+    .populate({
+      path: 'companies',
+      populate: [
+        { path: 'jobPosting' },
+        { path: 'events' },
+        { path: 'contacts' },
+      ],
+    })
     .then( companies => {
       return res.json(companies);
     })
