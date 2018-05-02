@@ -37,6 +37,9 @@ companyRouter.put('/api/profile/:profileId/company/:companyId', bearerAuth, json
   debug('PUT: /api/profile/:profileId/company/:companyId');
   if (!req.body.companyName) return next(createError(400, 'bad request'));
   Company.findByIdAndUpdate(req.params.companyId, req.body, {new:true})
+    .populate({ path: 'jobPosting' })
+    .populate({ path: 'events' })
+    .populate({ path: 'contacts' })
     .then( company => { 
       if(req.params.profileId === company.profileId.toString()){
         return res.json(company);
@@ -53,6 +56,9 @@ companyRouter.get('/api/profile/:profileId/company/:companyId', bearerAuth, func
   debug('GET: /api/profile/:profileId/company/:companyId');
   
   Company.findById(req.params.companyId)
+    .populate({ path: 'jobPosting' })
+    .populate({ path: 'events' })
+    .populate({ path: 'contacts' })
     .then(company => { 
       if (req.params.profileId === company.profileId.toString()) { 
         return res.json(company);
