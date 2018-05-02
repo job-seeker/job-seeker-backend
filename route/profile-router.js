@@ -27,7 +27,7 @@ profileRouter.get('/api/profile', bearerAuth, function(req, res, next) {
     .populate({
       path: 'companies',
       populate: [
-        { path: 'jobPosting' },
+        { path: 'jobPosting', model: 'job' },
         { path: 'events' },
         { path: 'contacts' },
       ],
@@ -40,6 +40,14 @@ profileRouter.get('/api/profile/:profileId', bearerAuth, function(req, res, next
   debug('GET: /api/profile/:profileId');
 
   Profile.findById(req.params.profileId)
+    .populate({
+      path: 'companies',
+      populate: [
+        { path: 'jobPosting' },
+        { path: 'events' },
+        { path: 'contacts' },
+      ],
+    })
     .then( profile => res.json(profile))
     .catch(next);
 });
@@ -57,6 +65,14 @@ profileRouter.put('/api/profile/:profileId', bearerAuth, jsonParser, function(re
   if(Object.keys(req.body).length === 0) return next(createError(400, 'bad request'));
 
   Profile.findByIdAndUpdate(req.params.profileId, req.body, { new: true })
+    .populate({
+      path: 'companies',
+      populate: [
+        { path: 'jobPosting'},
+        { path: 'events' },
+        { path: 'contacts' },
+      ],
+    })
     .then( profile => res.json(profile))
     .catch(next);
 });
